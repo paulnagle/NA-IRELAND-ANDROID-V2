@@ -45,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        webView = (WebView) findViewById(R.id.webview);
+        webView = (WebView) findViewById(R.id.activity_main_webview);
 
         // Needed settings, that are false be default:
         WebSettings settings = webView.getSettings();
