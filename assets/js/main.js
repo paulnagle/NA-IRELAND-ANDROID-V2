@@ -501,7 +501,14 @@ function populateConventions() {
 				$.each(ords, function(k2, v2) {
 //					DEBUG && console.log("	Filename = " + v2.fileName);
 //					DEBUG && console.log("	Title = " + v2.Title);
-					speakerLi += "<li><a href='#' class='ui-btn ui-shadow ui-corner-all' onClick='AndroidAudio.playAudio(\"" +  v2.fileName + "\");return false;'>" + v2.Title + "</a> <i class='fa fa-play fa-lg'></i></li>";
+					speakerLi += "<li><a href='#' class='ui-btn ui-shadow ui-corner-all' > ";
+					speakerLi += v2.Title;
+					speakerLi += "<i class='fa fa-stop  fa-lg icon-2x' style='float: right;' onClick='AndroidAudio.stopAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
+					speakerLi += "<i class='fa fa-pause fa-lg icon-2x' style='float: right;' onClick='AndroidAudio.pauseAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
+					speakerLi += "<i class='fa fa-play  fa-lg icon-2x' style='float: right;' onClick='AndroidAudio.playAudio(\"" +  v2.fileName + "\");return false;'>&nbsp;&nbsp;&nbsp;</i>";
+
+
+					speakerLi += "</a></li>";
 				});
 
 				conventionLi += speakerLi;
