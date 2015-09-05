@@ -203,6 +203,11 @@ $( document ).on( "pagecontainershow", function ( event, ui ) {
 	}
 });
 
+
+$(document).on("pagecontainerbeforechange", function (e ,data) {
+    AndroidAudio.silentStop();      // overkill much?
+});
+
 $(document).on("pagecreate", "#search-map", function() {
 	$(map).on('load', function () {
 		DEBUG && console.log("Running map on load event()");

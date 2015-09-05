@@ -100,6 +100,14 @@ public class AudioInterface {
         isSomethingPlaying = false;
     }
 
+    @JavascriptInterface
+    public void silentStop() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            isSomethingPlaying = false;
+            isSomethingPaused = false;
+        }
+    }
     /**
      * Convert a millisecond duration to a string format
      *
