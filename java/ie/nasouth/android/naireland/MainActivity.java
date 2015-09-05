@@ -93,9 +93,6 @@ public class MainActivity extends ActionBarActivity {
 
             Toast.makeText(getApplicationContext(), "No Internet access detected!!",
                     Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(getApplicationContext(), "Internets is here!",
-                    Toast.LENGTH_LONG).show();
         }
 
 
@@ -177,8 +174,9 @@ public class MainActivity extends ActionBarActivity {
         // and pause the MediaPlayer
         webView.onPause();
         webView.pauseTimers();
+
    //     webView.loadUrl(url);
-        webView.loadUrl("AudioInterface:window.HtmlViewer.injectIntoWebView(stopAudio());");
+
 
     }
 

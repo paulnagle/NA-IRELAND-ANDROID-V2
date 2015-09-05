@@ -12,6 +12,7 @@ var audio;
 var playlist;
 var tracks;
 var current;
+var trackLength = 0;
 
 // Extend the Default marker class
 // Each one of these markers on the map represents a meeting
@@ -503,11 +504,11 @@ function populateConventions() {
 //					DEBUG && console.log("	Title = " + v2.Title);
 					speakerLi += "<li><a href='#' class='ui-btn ui-shadow ui-corner-all' > ";
 					speakerLi += v2.Title;
-					speakerLi += "<i class='fa fa-stop  fa-lg icon-2x' style='float: right;' onClick='AndroidAudio.stopAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
-					speakerLi += "<i class='fa fa-pause fa-lg icon-2x' style='float: right;' onClick='AndroidAudio.pauseAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
-					speakerLi += "<i class='fa fa-play  fa-lg icon-2x' style='float: right;' onClick='AndroidAudio.playAudio(\"" +  v2.fileName + "\");return false;'>&nbsp;&nbsp;&nbsp;</i>";
-
-
+//					speakerLi += "&nbsp;(" + v2.Duration + ")";
+                    speakerLi += "<br>00:00&nbsp;/&nbsp00:00";
+					speakerLi += "<i class='fa fa-stop  fa-lg icon-4x' style='float: right;' onClick='AndroidAudio.stopAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
+					speakerLi += "<i class='fa fa-pause fa-lg icon-4x' style='float: right;' onClick='AndroidAudio.pauseAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
+					speakerLi += "<i class='fa fa-play  fa-lg icon-4x' style='float: right;' onClick='trackLength = AndroidAudio.playAudio(\"" +  v2.fileName + "\");return false;'>&nbsp;&nbsp;&nbsp;</i>";
 					speakerLi += "</a></li>";
 				});
 
