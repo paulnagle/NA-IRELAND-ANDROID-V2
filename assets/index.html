@@ -1,0 +1,283 @@
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<title>Narcotics Anonymous Ireland</title>
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400italic' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/leaflet.css" />
+	<link rel="stylesheet" href="css/MarkerCluster.css" />
+	<link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+	<link rel="stylesheet" href="css/paul-theme-2.css" />
+	<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" href="css/leaflet-slider.css" />
+	<link rel="stylesheet" href="css/L.Control.Locate.min.css" />
+
+	<script src="js/leaflet.js"></script>
+	<script src="js/leaflet.markercluster.js"></script>
+	<script src="js/Leaflet.MakiMarkers.js"></script>
+	<script src="js/spin.min.js"></script>
+	<script src="js/leaflet.spin.js"></script>
+	<script src="js/jquery-2.1.4.min.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script src="js/L.Control.Locate.min.js"></script>
+	<script src="js/leaflet-slider.js"></script>
+	<script src="js/main.js"></script>
+</head>
+
+<body>
+	<!-- Start of first page -->
+	<div data-role="page" id="one" >
+		<div data-role="header" data-add-back-btn="true" id ="one_header">
+			<h1>NA Ireland</h1>
+		</div><!-- /header -->
+		<div div role="main" class="ui-content">
+			<ul data-role="listview" data-inset="true">
+				<li><a href="#search-county" class="ui-btn ui-shadow ui-corner-all">Meetings List</a></li>
+				<li><a href="#search-map"    class="ui-btn ui-shadow ui-corner-all">Meetings Map</a></li>
+				<li><a href="#justfortoday"  class="ui-btn ui-shadow ui-corner-all">Just For Today</a></li>
+				<li><a href="#speakers"      class="ui-btn ui-shadow ui-corner-all">NA Speakers</a></li>
+				<li><a href="#events"        class="ui-btn ui-shadow ui-corner-all">Events & Conventions</a></li>
+				<li><a href="#contact"       class="ui-btn ui-shadow ui-corner-all">Contact Us</a></li>
+			</ul>
+		</div><!-- /content -->
+	</div><!-- /first page-->
+
+	<!-- Start of search-county page -->
+	<div data-role="page" id="search-county" >
+		<div data-role="header" id="county-header" data-add-back-btn="true" data-position="fixed">
+			<h1>Choose Area</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content">
+			<ul data-role="listview" data-inset="true">
+				<li><a href="#northern"   class="ui-btn ui-shadow ui-corner-all">Northern Area</a></li>
+				<li><a href="#southern"   class="ui-btn ui-shadow ui-corner-all">Southern Area</a></li>
+				<li><a href="#eastern"     class="ui-btn ui-shadow ui-corner-all">Eastern Area</a></li>
+				<li><a href="#western"    class="ui-btn ui-shadow ui-corner-all">Western Area</a></li>
+			</ul>
+		</div><!-- /footer -->
+	</div><!-- /search-county -->
+
+	<!-- Start of Northen Area page -->
+	<div data-role="page" id="northern" >
+		<div data-role="header" id="northern-header" data-add-back-btn="true" data-position="fixed">
+			<h1>Northern Area</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content" >
+			<ul data-role="listview" data-inset="true">
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Antrim');" class="ui-btn ui-shadow ui-corner-all" >Antrim</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Armagh');" class="ui-btn ui-shadow ui-corner-all" >Armagh</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Cavan');" class="ui-btn ui-shadow ui-corner-all" >Cavan</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Down');" class="ui-btn ui-shadow ui-corner-all" >Down</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Derry');" class="ui-btn ui-shadow ui-corner-all" >Derry</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Donegal');" class="ui-btn ui-shadow ui-corner-all" >Donegal</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Fermanagh');" class="ui-btn ui-shadow ui-corner-all" >Fermanagh</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Monaghan');" class="ui-btn ui-shadow ui-corner-all" >Monaghan</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Tyrone');" class="ui-btn ui-shadow ui-corner-all" >Tyrone</a></li>
+			</ul>
+		</div><!-- /footer -->
+	</div><!-- /northern area -->
+
+	<!-- Start of Southern Area page -->
+	<div data-role="page" id="southern" >
+		<div data-role="header" id="southern-header" data-add-back-btn="true" data-position="fixed">
+			<h1>Southern Area</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content" >
+			<ul data-role="listview" data-inset="true">
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Cork');" class="ui-btn ui-shadow ui-corner-all" >Cork</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Clare');" class="ui-btn ui-shadow ui-corner-all">Clare</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Tipperary');" class="ui-btn ui-shadow ui-corner-all">Tipperary</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Waterford');" class="ui-btn ui-shadow ui-corner-all">Waterford</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Kerry');" class="ui-btn ui-shadow ui-corner-all">Kerry</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Waterford');"  class="ui-btn ui-shadow ui-corner-all">Waterford</a></li>
+
+			</ul>
+		</div><!-- /footer -->
+	</div><!-- /southern area -->
+
+	<!-- Start of Eastern Area page -->
+	<div data-role="page" id="eastern" >
+		<div data-role="header" id="eastern-header" data-add-back-btn="true" data-position="fixed">
+			<h1>Eastern Area</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content" >
+			<ul data-role="listview" data-inset="true">
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Dublin');" class="ui-btn ui-shadow ui-corner-all" >Dublin</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Carlow');" class="ui-btn ui-shadow ui-corner-all" >Carlow</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Cavan');" class="ui-btn ui-shadow ui-corner-all" >Cavan</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Kildare');" class="ui-btn ui-shadow ui-corner-all" >Kildare</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Laois');" class="ui-btn ui-shadow ui-corner-all" >Laois</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Kilkenny');" class="ui-btn ui-shadow ui-corner-all" >Kilkenny</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Louth');" class="ui-btn ui-shadow ui-corner-all" >Louth</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Monaghan');" class="ui-btn ui-shadow ui-corner-all" >Monaghan</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Meath');" class="ui-btn ui-shadow ui-corner-all" >Meath</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Westmeath');" class="ui-btn ui-shadow ui-corner-all" >Westmeath</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Wicklow');" class="ui-btn ui-shadow ui-corner-all" >Wicklow</a></li>
+			</ul>
+		</div><!-- /footer -->
+	</div><!-- /eastern area -->
+
+	<!-- Start of Western Area page -->
+	<div data-role="page" id="western" >
+		<div data-role="header" id="western-header" data-add-back-btn="true" data-position="fixed">
+			<h1>Western Area</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content" >
+			<ul data-role="listview" data-inset="true">
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Galway');" class="ui-btn ui-shadow ui-corner-all" >Galway</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Leitrim');" class="ui-btn ui-shadow ui-corner-all" >Leitrim</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Longford');" class="ui-btn ui-shadow ui-corner-all" >Longford</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Mayo');" class="ui-btn ui-shadow ui-corner-all" >Mayo</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Roscommon');" class="ui-btn ui-shadow ui-corner-all" >Roscommon</a></li>
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Sligo');" class="ui-btn ui-shadow ui-corner-all" >Sligo</a></li>
+
+			</ul>
+		</div><!-- /footer -->
+	</div><!-- /western area -->
+
+	<!-- Start of County Results page -->
+	<div data-role="page" id="county-search-results" >
+		<div data-role="header" id="county-results-header" data-add-back-btn="true" data-position="fixed">
+			<h1>Search Results</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content" >
+			<div id ="county-results">
+
+			</div>
+		</div><!-- /footer -->
+	</div><!-- /county results-->
+
+	<!-- Start of search-map page -->
+	<div data-role="page" id="search-map" >
+		<div data-role="header" id="map-header" data-add-back-btn="true" data-position="fixed">
+			<h1>Search Results</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content" style="padding: 0px !important">
+			<div id="map_canvas" style="width: 100% !important"></div>
+			<div id="list_canvas" class="ui-content ui-content-list"  >
+				<div id="list-results" >
+				</div>
+			</div>
+		</div><!-- /content -->
+		<div data-role="footer" id="map-footer" data-position="fixed">
+			<div class="segmented-control ui-bar-d"  style="text-align:center;">
+				<fieldset data-role="controlgroup" data-type="horizontal" >
+					<input name="switch" id="map-switch" type="radio" checked="true" >
+					<label for="map-switch" style="width: 100px;text-align:center;">Map   </label>
+					<input name="switch" id="list-switch" type="radio">
+					<label for="list-switch" style="width: 100px;text-align:center;">List  </label>
+				</fieldset>
+			</div>
+		</div><!-- /footer -->
+	</div><!-- /search-map -->
+
+	<!-- Start of justfortoday page -->
+	<div data-role="page" id="justfortoday" >
+		<div data-role="header" data-add-back-btn="true" data-position="fixed">
+			<h1>Just For Today</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content">
+		 <div class="JFTLoader" style=" color: #fff; text-shadow: #000 0px 0px 1px; -webkit-font-smoothing: antialiased;" > </div>
+		</div>
+	</div><!-- /settings -->
+
+	<!-- Start of speakers page -->
+	<div data-role="page" id="speakers" >
+		<div data-role="header" data-add-back-btn="true" data-position="fixed">
+			<h1>Speakers</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content">
+			<div id="fillSpeakers"></div>
+		</div><!-- /content -->
+	</div><!-- /settings -->
+
+	<!-- Start of speakers page -->
+	<div data-role="page" id="events" >
+		<div data-role="header" data-add-back-btn="true" data-position="fixed">
+			<h1>Events & Conventions</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content">
+			<div class="UpcomingEvents" > </div>
+		</div><!-- /content -->
+	</div><!-- /settings -->
+
+	<!-- Start of Contact page -->
+	<div data-role="page" id="contact" >
+		<div data-role="header" data-add-back-btn="true" data-position="fixed">
+			<h1>Contact Us</h1>
+		</div><!-- /header -->
+		<div role="main" class="ui-content">
+			<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' >
+				<h4 id='sunHead'>Irish Region</h4>
+				<li style='list-style-type: none !important'><h4>Regional Website</h4><p><a href='http://www.na-ireland.org'>http://www.na-ireland.org</a></li>
+				<li style='list-style-type: none !important'><h4>Southern Area</h4><p><a href='http://nasouth.ie/wp/'>http://www.nasouth.ie</a></li>
+				<li style='list-style-type: none !important'><h4>Eastern Area</h4><p><a href='http://www.nairleast.org'>http://www.naeasternarea.org</a></li>
+				<li style='list-style-type: none !important'><h4>Northern Area</h4><p><a href='http://www.nanorthernireland.com'>http://www.nanorthernireland.com</a></li>
+			</ul>
+			<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' >
+				<h4 id='sunHead'>Eastern Area</h4>
+				<li style='list-style-type: none !important'>
+				<a href="mailto:info@na-ireland.org">Regional Contact</a>
+				</li>
+				<li style='list-style-type: none !important'>
+				<a href="mailto:info@naeasternarea.org">Eastern Area</a>
+				</li>
+				<li style='list-style-type: none !important'>
+				<a href="mailto:info@nasouth.ie">Southern Area</a>
+				</li>
+				<li style='list-style-type: none !important'>
+				<a href="mailto:contact@nanorthernireland.com">Northern Area</a>
+				</li>
+			</ul>
+			<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' >
+				<h4 id='sunHead'>Southern Area</h4>
+				<li style='list-style-type: none !important'>
+				<h4>Regional Info Line</h4>
+				<p style="font-family:verdana;font-size:14px;">Information line only</p>
+				<p style="font-family:verdana;font-size:14px;"><a href="tel:+353016728000">Tel: +353 (0)1-6728 000</a></p>
+				</li>
+				<li style='list-style-type: none !important'>
+				<h4>Eastern Area</h4>
+				<p style="font-family:verdana;font-size:14px;"><a href="tel:+3530868629308">Tel: +353 (0) 86-8629 308</a></p>
+				</li>
+				<li style='list-style-type: none !important'>
+				<h4>Southern Area</h4>
+				<p style="font-family:verdana;font-size:14px;">Every evening from 6-9pm</p>
+				<p style="font-family:verdana;font-size:14px;"><a href="tel:+3530871386120">Tel: +353 (0) 87-1386 120</a></p>
+				</li>
+				<li style='list-style-type: none !important'>
+				<h4>Western Area</h4>
+				<p style="font-family:verdana;font-size:14px;"><a href="tel:+3530868149004">Tel: +353 (0) 86-8149 004</a></p>
+				</li>
+				<li style='list-style-type: none !important'>
+				<h4>Northern Area</h4>
+				<p style="font-family:verdana;font-size:14px;">Every evening from 7-10pm</p>
+				<p style="font-family:verdana;font-size:14px;"><a href="tel:+447810172991">Tel: +44 781-0172991</a></p>
+				<p style="font-family:verdana;font-size:14px;">In Donegal, you can call <a href="tel:+3530860668377">+353 (0) 86-066 8377</a></p>
+				</li>
+			</ul>
+			<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' >
+				<h4 id='sunHead'>Irish Service Office</h4>
+				<li style='list-style-type: none !important'>
+				<p style="font-family:verdana;font-size:14px;">Narcotics Anonymous Ireland,</p>
+				<p style="font-family:verdana;font-size:14px;">Service Office,</p>
+				<p style="font-family:verdana;font-size:14px;">29 Bride Street,</p>
+				<p style="font-family:verdana;font-size:14px;">Dublin 8</p>
+				<p style="font-family:verdana;font-size:14px;"><a href="tel:+353016728000">Tel: +353 (0)1-6728 000</a></p>
+				<p style="font-family:verdana;font-size:14px;"><i>(Information Line only)</i></p>
+				</li>
+
+				</li>
+			</ul>
+		</div><!-- /content -->
+	</div><!-- /settings -->
+
+
+</body>
+
+</html>
