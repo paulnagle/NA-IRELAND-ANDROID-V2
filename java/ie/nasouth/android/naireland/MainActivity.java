@@ -1,12 +1,12 @@
 package ie.nasouth.android.naireland;
 
-
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
-//import android.content.Intent;
-//import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -16,6 +16,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.GeolocationPermissions;
+import android.widget.Toast;
+import android.webkit.JavascriptInterface;
+
 
 /**
  * Simple WebApp that creates a WebView for BMLT smart phone
@@ -36,7 +39,7 @@ public class MainActivity extends ActionBarActivity {
     private WebView webView;
 
     // The URL for the BMLT smart phone emulator web page:
-    private final String url = "http://android.nasouth.ie";
+    private final String url = "file:///android_asset/index.html";
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -51,6 +54,7 @@ public class MainActivity extends ActionBarActivity {
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setBuiltInZoomControls(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
 
         // Allows current location access:
         webView.setWebChromeClient(new WebChromeClient() {
@@ -78,6 +82,24 @@ public class MainActivity extends ActionBarActivity {
             }
 
         });
+
+        ConnectivityManager cm =  (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        if (!isConnected) {
+
+            Toast.makeText(getApplicationContext(), "No Internet access detected!!",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Internets is here!",
+                    Toast.LENGTH_LONG).show();
+        }
+
+
+        webView.addJavascriptInterface(new AudioInterface(this), "AndroidAudio");
 
         // Load the web-page:
         webView.loadUrl(url);
@@ -136,9 +158,49 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            MainActivity.this.finish();
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(0);
+            getParent().finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();  // Always call the superclass method first
+        // For example, if the phone rings while we are listening to
+        // a speaker, then we will want to stop any HTML5 audio that
+        // might be playing, so we need to pause all webview threads
+        // and pause the MediaPlayer
+        webView.onPause();
+        webView.pauseTimers();
+   //     webView.loadUrl(url);
+        webView.loadUrl("AudioInterface:window.HtmlViewer.injectIntoWebView(stopAudio());");
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        // We should restore the state of the webview from onPause
+        webView.onResume();
+        webView.resumeTimers();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        webView.loadUrl("about:blank");
+        webView.stopLoading();
+        webView.setWebChromeClient(null);
+        webView.setWebViewClient(null);
+        webView.destroy();
+        webView = null;
     }
 
 }
