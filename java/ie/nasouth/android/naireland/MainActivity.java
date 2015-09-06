@@ -66,9 +66,12 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-                // Override everything but the google maps, which will open up the
-                // map app on the phone:
-                if (Uri.parse(url).getHost().equals("maps.google.com")) {
+                // Override everything but external links
+                if ((Uri.parse(url).getHost().equals("maps.google.com")) ||
+                    (Uri.parse(url).getHost().equals("www.na-ireland.org")) ||
+                    (Uri.parse(url).getHost().equals("www.naeasternarea.org")) ||
+                    (Uri.parse(url).getHost().equals("www.nanorthernireland.com")) ||
+                    (Uri.parse(url).getHost().equals("github.com")) ) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                     return true;
