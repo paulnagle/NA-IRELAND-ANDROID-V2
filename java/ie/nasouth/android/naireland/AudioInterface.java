@@ -66,13 +66,13 @@ public class AudioInterface {
 
         if (isSomethingPaused){
             mediaPlayer.seekTo(length);
-            Toast.makeText(mContext, "Un-pausing at " + getDurationBreakdown(length), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Un-pausing at " + getDurationBreakdown(length), Toast.LENGTH_SHORT).show();
             isSomethingPaused = false;
         }
 
         isSomethingPlaying = true;
         int totalDuration = mediaPlayer.getDuration();
-        Toast.makeText(mContext, "Total track length is " + getDurationBreakdown(totalDuration), Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, "Total track length is " + getDurationBreakdown(totalDuration), Toast.LENGTH_SHORT).show();
         return totalDuration;
     }
 
@@ -88,7 +88,7 @@ public class AudioInterface {
             length = mediaPlayer.getCurrentPosition();  // Store the current position?
             mediaPlayer.pause();
             isSomethingPaused = true;
-            Toast.makeText(mContext, "Pausing at " + getDurationBreakdown(length) + ". Press pause again to resume.", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Pausing at " + getDurationBreakdown(length) + ". Press pause again to resume.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -133,5 +133,10 @@ public class AudioInterface {
         sb.append(" Seconds");
 
         return(sb.toString());
+    }
+
+    @JavascriptInterface
+    public void showToast(String toast) {
+        Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
     }
 }

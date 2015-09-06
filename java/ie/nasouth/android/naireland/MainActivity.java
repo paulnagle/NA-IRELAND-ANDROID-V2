@@ -17,8 +17,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.GeolocationPermissions;
 import android.widget.Toast;
-import android.webkit.JavascriptInterface;
-
 
 /**
  * Simple WebApp that creates a WebView for BMLT smart phone
@@ -37,8 +35,6 @@ import android.webkit.JavascriptInterface;
 public class MainActivity extends ActionBarActivity {
 
     private WebView webView;
-
-    // The URL for the BMLT smart phone emulator web page:
     private final String url = "file:///android_asset/index.html";
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -78,29 +74,22 @@ public class MainActivity extends ActionBarActivity {
                     return true;
                 }
                 return false;
-
             }
 
         });
 
         ConnectivityManager cm =  (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
+        boolean isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
 
         if (!isConnected) {
-
-            Toast.makeText(getApplicationContext(), "No Internet access detected!!",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "No Internet access detected!!", Toast.LENGTH_LONG).show();
         }
-
 
         webView.addJavascriptInterface(new AudioInterface(this), "AndroidAudio");
 
         // Load the web-page:
         webView.loadUrl(url);
-
     }
 
     /**
@@ -132,8 +121,7 @@ public class MainActivity extends ActionBarActivity {
         // or later, or by the code above on earlier versions of the
         // platform.
 
-        // Can do this below once bug is fixed:
-        if(webView.canGoBack()){
+        if (webView.canGoBack()) {
             webView.goBack();
         }
         else {
@@ -164,34 +152,34 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void onPause() {
         super.onPause();  // Always call the superclass method first
+
         // For example, if the phone rings while we are listening to
         // a speaker, then we will want to stop any HTML5 audio that
         // might be playing, so we need to pause all webview threads
         // and pause the MediaPlayer
         webView.onPause();
         webView.pauseTimers();
-
-   //     webView.loadUrl(url);
-
-
+        webView.loadUrl(url);
     }
 
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        // We should restore the state of the webview from onPause
+        // We should try to restore the state of the webview from onPause
+        // but because of complications with jquery, webview and audio, we
+        // will instead reload the home page.
         webView.onResume();
         webView.resumeTimers();
+        webView.loadUrl(url);
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        super.onDestroy(); // Always call the superclass method first
 
         webView.loadUrl("about:blank");
         webView.stopLoading();

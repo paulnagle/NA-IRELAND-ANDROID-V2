@@ -510,7 +510,7 @@ function populateConventions() {
 					speakerLi += "<li><a href='#' class='ui-btn ui-shadow ui-corner-all' > ";
 					speakerLi += v2.Title;
 //					speakerLi += "&nbsp;(" + v2.Duration + ")";
-                    speakerLi += "<br>00:00&nbsp;/&nbsp00:00";
+                    speakerLi += "<br>";
 					speakerLi += "<i class='fa fa-stop  fa-lg icon-4x' style='float: right;' onClick='AndroidAudio.stopAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
 					speakerLi += "<i class='fa fa-pause fa-lg icon-4x' style='float: right;' onClick='AndroidAudio.pauseAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
 					speakerLi += "<i class='fa fa-play  fa-lg icon-4x' style='float: right;' onClick='trackLength = AndroidAudio.playAudio(\"" +  v2.fileName + "\");return false;'>&nbsp;&nbsp;&nbsp;</i>";
