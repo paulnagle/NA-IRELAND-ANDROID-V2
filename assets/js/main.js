@@ -268,40 +268,6 @@ function getCurrentGPSLocation() {
 	navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy:true, timeout: 6000});
 }
 
-// This function reads the address in the locTextBox and does a geocode search for that location
-// When the location is found, the function renderGeocode is called
-function findAddress(geocodeLocation) {
-	// Using my personal key here!
-	var geoCodeURL = 'http://open.mapquestapi.com/geocoding/v1/address?key=Fmjtd%7Cluur25ubn0%2Crw%3Do5-9w751f&location='
-	geoCodeURL += geocodeLocation;
-	geoCodeURL +=', Ireland&callback=renderGeocode';
-	var script = document.createElement('script');
-	script.type = 'text/javascript';
-	script.src = geoCodeURL;
-	document.body.appendChild(script);
-};
-
-// This function is called from findAddress when the search for the location is complete.
-function renderGeocode(response) {
-    var html = '';
-	var geoCodeResult = response.results[0].locations[0];
-
-	if (geoCodeResult) {
-		var d = new Date();
-		hours = d.getHours();
-		hours = hours < 10 ? '0'+hours : hours;
-		minutes = d.getMinutes();
-		minutes = minutes < 10 ? '0'+minutes : minutes;
-		seconds = d.getSeconds();
-		seconds = seconds < 10 ? '0'+seconds : seconds;
-		DEBUG && console.log("Location updated at " + hours + ":" + minutes + ":" + seconds);
-//		document.getElementById("geoLocationLegend").innerHTML = "Location updated at " + hours + ":" + minutes + ":" + seconds;
-		myLatLng = L.latLng(geoCodeResult.latLng.lat, geoCodeResult.latLng.lng);
-		$.mobile.changePage('#dialog', {'role': 'dialog'});
-	} else {
-		DEBUG && console.log("Location not found");
-	}
-}
 
 // This function generates a URL to query the BMLT, based on current location and a search radius
 function buildSearchURL () {
@@ -347,7 +313,7 @@ function runSearch() {
 
 			fromHere = "'" + myLatLng.lat + ',' + myLatLng.lng + "'";
 			toHere   = "'" + val.latitude + ',' + val.longitude + "'";
-			markerContent += '<a href="http://maps.google.com/maps?daddr=';
+			markerContent += '<i class="fa fa-map-o"></i>&nbsp;<a href="http://maps.google.com/maps?daddr=';
 			markerContent += val.latitude + ',' + val.longitude;
 			markerContent +='">Directions</a></li>';
 			markerContent += '<br><hr>';
@@ -438,7 +404,7 @@ function runSearchCounty(county) {
 
 			fromHere = "'" + myLatLng.lat + ',' + myLatLng.lng + "'";
 			toHere   = "'" + val.latitude + ',' + val.longitude + "'";
-			markerContent += '<a href="http://maps.google.com/maps?daddr=';
+			markerContent += '<i class="fa fa-map-o"></i>&nbsp;<a href="http://maps.google.com/maps?daddr=';
 			markerContent += val.latitude + ',' + val.longitude;
 			markerContent +='">Directions</a></li>';
 			markerContent += '<br><hr>';
