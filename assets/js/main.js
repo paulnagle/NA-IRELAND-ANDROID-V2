@@ -328,17 +328,17 @@ function runSearch() {
 		$("#list-results").empty();
 		markerClusterer = new L.markerClusterGroup({showCoverageOnHover: false,
 													removeOutsideVisibleBounds: false});
-		var sunCount =0, monCount =0, tueCount = 0, wedCount = 0, thuCount = 0, friCount = 0, satCount = 0;
-		var sunExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='sunHead'>Sunday</h4>";
-		var monExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='monHead'>Monday</h4>";
-		var tueExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='tueHead'>Tuesday</h4>";
-		var wedExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='wedHead'>Wednesday</h4>";
-		var thuExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='thuHead'>Thursday</h4>";
-		var friExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='friHead'>Friday</h4>";
-		var satExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='satHead'>Saturday</h4>";
+
+        var sunCount =0, monCount =0, tueCount = 0, wedCount = 0, thuCount = 0, friCount = 0, satCount = 0;
+        var sunExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='sunMapHead'>Sunday</h4>";
+        var monExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='monMapHead'>Monday</h4>";
+        var tueExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='tueMapHead'>Tuesday</h4>";
+        var wedExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='wedMapHead'>Wednesday</h4>";
+        var thuExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='thuMapHead'>Thursday</h4>";
+        var friExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='friMapHead'>Friday</h4>";
+        var satExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='satMapHead'>Saturday</h4>";
 
 		$.each( data, function( key, val) {
-
 			markerContent = "<li style='list-style-type: none !important'><h4>" + val.meeting_name + "</h4>";
 			markerContent += "<p><i>" + dayOfWeekAsString(val.weekday_tinyint)
 			markerContent += "&nbsp;" + val.start_time.substring(0, 5) + "</i>&nbsp;&nbsp;";
@@ -350,6 +350,7 @@ function runSearch() {
 			markerContent += '<a href="http://maps.google.com/maps?daddr=';
 			markerContent += val.latitude + ',' + val.longitude;
 			markerContent +='">Directions</a></li>';
+			markerContent += '<br><hr>';
 
 			switch (val.weekday_tinyint) {
 				case "1": sunCount++; sunExpandLi = sunExpandLi + markerContent; break;
@@ -383,13 +384,14 @@ function runSearch() {
 		$("#list-results").append(friExpandLi);
 		$("#list-results").append(satExpandLi);
 
-		$("#sunHead").text("Sunday (" + sunCount + " meetings)");
-		$("#monHead").text("Monday (" + monCount + " meetings)");
-		$("#tueHead").text("Tuesday (" + tueCount + " meetings)");
-		$("#wedHead").text("Wednesday (" + wedCount + " meetings)");
-		$("#thuHead").text("Thursday (" + thuCount + " meetings)");
-		$("#friHead").text("Friday (" + friCount + " meetings)");
-		$("#satHead").text("Saturday (" + satCount + " meetings)");
+
+		$("#sunMapHead").text("Sunday ("    + sunCount + (sunCount == 1 ? " meeting)" : " meetings)"));
+		$("#monMapHead").text("Monday ("    + monCount + (monCount == 1 ? " meeting)" : " meetings)"));
+		$("#tueMapHead").text("Tuesday ("   + tueCount + (tueCount == 1 ? " meeting)" : " meetings)"));
+		$("#wedMapHead").text("Wednesday (" + wedCount + (wedCount == 1 ? " meeting)" : " meetings)"));
+		$("#thuMapHead").text("Thursday ("  + thuCount + (thuCount == 1 ? " meeting)" : " meetings)"));
+		$("#friMapHead").text("Friday ("    + friCount + (friCount == 1 ? " meeting)" : " meetings)"));
+		$("#satMapHead").text("Saturday ("  + satCount + (satCount == 1 ? " meeting)" : " meetings)"));
 
 		map.addLayer(markerClusterer);
 		var div = $('#list-results');
@@ -417,9 +419,6 @@ function runSearchCounty(county) {
 	DEBUG && console.log("****Running runSearch()****");
 
 	$.getJSON(search_url, function( data) {
-		if (markerClusterer) {
-			map.removeLayer(markerClusterer);
-		}
 
 		var sunCount =0, monCount =0, tueCount = 0, wedCount = 0, thuCount = 0, friCount = 0, satCount = 0;
 		var sunExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='sunHead'>Sunday</h4>";
@@ -471,13 +470,13 @@ function runSearchCounty(county) {
 		$("#county-results").append(friExpandLi);
 		$("#county-results").append(satExpandLi);
 
-		$("#sunHead").text("Sunday (" + sunCount + " meetings)");
-		$("#monHead").text("Monday (" + monCount + " meetings)");
-		$("#tueHead").text("Tuesday (" + tueCount + " meetings)");
-		$("#wedHead").text("Wednesday (" + wedCount + " meetings)");
-		$("#thuHead").text("Thursday (" + thuCount + " meetings)");
-		$("#friHead").text("Friday (" + friCount + " meetings)");
-		$("#satHead").text("Saturday (" + satCount + " meetings)");
+		$("#sunHead").text("Sunday ("    + sunCount + (sunCount == 1 ? " meeting)" : " meetings)"));
+		$("#monHead").text("Monday ("    + monCount + (monCount == 1 ? " meeting)" : " meetings)"));
+		$("#tueHead").text("Tuesday ("   + tueCount + (tueCount == 1 ? " meeting)" : " meetings)"));
+		$("#wedHead").text("Wednesday (" + wedCount + (wedCount == 1 ? " meeting)" : " meetings)"));
+		$("#thuHead").text("Thursday ("  + thuCount + (thuCount == 1 ? " meeting)" : " meetings)"));
+		$("#friHead").text("Friday ("    + friCount + (friCount == 1 ? " meeting)" : " meetings)"));
+		$("#satHead").text("Saturday ("  + satCount + (satCount == 1 ? " meeting)" : " meetings)"));
 
 		spinner.stop();
 		var div = $('#county-results');
