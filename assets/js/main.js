@@ -204,9 +204,9 @@ $( document ).on( "pagecontainershow", function ( event, ui ) {
 });
 
 
-$(document).on("pagecontainerbeforechange", function (e ,data) {
-    AndroidAudio.silentStop();      // overkill much?
-});
+//$(document).on("pagecontainerbeforechange", function (e ,data) {
+//    AndroidAudio.silentStop();      // overkill much?
+//});
 
 $(document).on("pagecreate", "#search-map", function() {
 	$(map).on('load', function () {
@@ -472,14 +472,19 @@ function populateConventions() {
 				$.each(ords, function(k2, v2) {
 //					DEBUG && console.log("	Filename = " + v2.fileName);
 //					DEBUG && console.log("	Title = " + v2.Title);
-					speakerLi += "<li><a href='#' class='ui-btn ui-shadow ui-corner-all' > ";
+//					speakerLi += "<li><a href='#' class='ui-btn ui-shadow ui-corner-all' > ";
+//					speakerLi += v2.Title;
+//                    speakerLi += "<br>";
+//					speakerLi += "<i class='fa fa-stop  fa-lg icon-4x' style='float: right;' onClick='AndroidAudio.stopAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
+//					speakerLi += "<i class='fa fa-pause fa-lg icon-4x' style='float: right;' onClick='AndroidAudio.pauseAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
+//					speakerLi += "<i class='fa fa-play  fa-lg icon-4x' style='float: right;' onClick='trackLength = AndroidAudio.playAudio(\"" +  v2.fileName + "\");return false;'>&nbsp;&nbsp;&nbsp;</i>";
+//					speakerLi += "</a></li>";
+					speakerLi += "<li><a href='" +  v2.fileName + "' class='ui-btn ui-shadow ui-corner-all' > ";
 					speakerLi += v2.Title;
-//					speakerLi += "&nbsp;(" + v2.Duration + ")";
-                    speakerLi += "<br>";
-					speakerLi += "<i class='fa fa-stop  fa-lg icon-4x' style='float: right;' onClick='AndroidAudio.stopAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
-					speakerLi += "<i class='fa fa-pause fa-lg icon-4x' style='float: right;' onClick='AndroidAudio.pauseAudio();return false;'>&nbsp;&nbsp;&nbsp;</i>";
-					speakerLi += "<i class='fa fa-play  fa-lg icon-4x' style='float: right;' onClick='trackLength = AndroidAudio.playAudio(\"" +  v2.fileName + "\");return false;'>&nbsp;&nbsp;&nbsp;</i>";
 					speakerLi += "</a></li>";
+
+
+
 				});
 
 				conventionLi += speakerLi;

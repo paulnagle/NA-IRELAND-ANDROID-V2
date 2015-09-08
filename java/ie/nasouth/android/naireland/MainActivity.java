@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +33,7 @@ import android.widget.Toast;
  * @author anonymous
  *
  */
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
     private final String url = "file:///android_asset/index.html";
@@ -76,6 +77,15 @@ public class MainActivity extends ActionBarActivity {
                     startActivity(intent);
                     return true;
                 }
+                if (url.endsWith(".mp3")) {
+
+                    Intent intent = new Intent(MainActivity.this, AudioPlayer.class);
+                    Bundle b = new Bundle();
+                    b.putString("AUDIO_FILE_NAME", url);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                    return true;
+                }
                 return false;
             }
 
@@ -89,7 +99,7 @@ public class MainActivity extends ActionBarActivity {
             Toast.makeText(getApplicationContext(), "No Internet access detected!!", Toast.LENGTH_LONG).show();
         }
 
-        webView.addJavascriptInterface(new AudioInterface(this), "AndroidAudio");
+  //      webView.addJavascriptInterface(new AudioInterface(this), "AndroidAudio");
 
         // Load the web-page:
         webView.loadUrl(url);
@@ -159,25 +169,12 @@ public class MainActivity extends ActionBarActivity {
     public void onPause() {
         super.onPause();  // Always call the superclass method first
 
-        // For example, if the phone rings while we are listening to
-        // a speaker, then we will want to stop any HTML5 audio that
-        // might be playing, so we need to pause all webview threads
-        // and pause the MediaPlayer
-        webView.onPause();
-        webView.pauseTimers();
-        webView.loadUrl(url);
     }
 
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        // We should try to restore the state of the webview from onPause
-        // but because of complications with jquery, webview and audio, we
-        // will instead reload the home page.
-        webView.onResume();
-        webView.resumeTimers();
-        webView.loadUrl(url);
     }
 
     @Override

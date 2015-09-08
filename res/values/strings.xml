@@ -2,4 +2,8 @@
     <string name="app_name">NA Ireland</string>
 
     <string name="action_settings">Exit App</string>
+    <string name="title_activity_audio_player">AudioPlayer</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="NowPlaying">Now playing:</string>
 </resources>
