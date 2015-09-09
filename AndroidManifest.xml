@@ -28,7 +28,8 @@
         </activity>
         <activity
             android:name=".AudioPlayer"
-            android:label="@string/title_activity_audio_player" >
+            android:label="@string/title_activity_audio_player"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -99,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No Internet access detected!!", Toast.LENGTH_LONG).show();
         }
 
-  //      webView.addJavascriptInterface(new AudioInterface(this), "AndroidAudio");
-
         // Load the web-page:
         webView.loadUrl(url);
     }

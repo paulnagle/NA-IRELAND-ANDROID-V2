@@ -2,7 +2,9 @@ package ie.nasouth.android.naireland;
 
 import android.app.Activity;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class AudioPlayer extends Activity implements OnPreparedListener, MediaController.MediaPlayerControl{
     private static final String TAG = "AudioPlayer";
@@ -20,6 +23,8 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
     private MediaPlayer mediaPlayer;
     private MediaController mediaController;
     private String audioFile;
+    private int pausedPosition = 0;
+    private MediaMetadataRetriever retreiver = new MediaMetadataRetriever();
 
     private Handler handler = new Handler();
 
@@ -29,7 +34,8 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
 
         Bundle b = getIntent().getExtras();
         audioFile = b.getString("AUDIO_FILE_NAME");
-        ((TextView)findViewById(R.id.now_playing_text)).setText(audioFile);
+        ((TextView)findViewById(R.id.now_playing_text)).setText("Loading ....");
+
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnPreparedListener(this);
@@ -39,8 +45,9 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
         try {
             Log.d(TAG, " Audion filename = " + audioFile);
             mediaPlayer.setDataSource(audioFile);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
+            retreiver.setDataSource(audioFile, new HashMap<String, String>());
+            mediaPlayer.prepareAsync();
+  //          mediaPlayer.start();
         } catch (IOException e) {
             Log.e(TAG, "Could not open file " + audioFile + " for playback.", e);
         }
@@ -53,15 +60,13 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
 
     @Override
     protected void onStop() {
+        Log.d(TAG, " onStop ");
         super.onStop();
-        mediaController.hide();
-        mediaPlayer.stop();
-        mediaPlayer.release();
+
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //the MediaController will hide after 3 seconds - tap the screen to make it appear again
         mediaController.show(0);
         return false;
     }
@@ -108,7 +113,7 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
     }
     //--------------------------------------------------------------------------------
 
-    public void onPrepared(MediaPlayer mediaPlayer) {
+    public void onPrepared(final MediaPlayer mediaPlayer) {
         Log.d(TAG, "onPrepared");
         mediaController.setMediaPlayer(this);
         mediaController.setAnchorView(findViewById(R.id.main_audio_view));
@@ -116,9 +121,34 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
 
         handler.post(new Runnable() {
             public void run() {
+                //((TextView) findViewById(R.id.now_playing_text)).setText(audioFile);
+                ((TextView) findViewById(R.id.now_playing_text)).setText(retreiver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
+                mediaPlayer.start();
                 mediaController.setEnabled(true);
                 mediaController.show(0);
             }
         });
+    }
+
+    @Override
+    public void onPause() {
+        Log.d(TAG, " onPause ");
+        super.onPause();  // Always call the superclass method first
+
+        mediaPlayer.pause();
+        pausedPosition = mediaPlayer.getCurrentPosition();
+        Log.d(TAG, " onPause : pausedPosition = " + pausedPosition);
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(TAG, " onResume ");
+        super.onResume();  // Always call the superclass method first
+
+        if (mediaPlayer != null) {
+            mediaPlayer.start();
+            mediaPlayer.seekTo(pausedPosition);
+            mediaController.show(0);
+        }
     }
 }
