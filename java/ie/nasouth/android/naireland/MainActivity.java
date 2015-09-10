@@ -98,6 +98,13 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
+                // Redirect all meetingmap: links to the google maps activity MeetingMap.class
+                if (url.startsWith("meetingmap:")) {
+                    Intent MeetingsMapIntent = new Intent(MainActivity.this, MeetingMap.class);
+                    startActivity(MeetingsMapIntent);
+                    return true;
+                }
+
                 // Redirect all of the external links to the system web browser
                 if (    (Uri.parse(url).getHost().equals("maps.google.com")) ||
                         (Uri.parse(url).getHost().equals("www.na-ireland.org")) ||

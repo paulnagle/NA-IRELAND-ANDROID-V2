@@ -6,4 +6,5 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="NowPlaying">Now playing:</string>
+    <string name="title_activity_meeting_map">Meetings Map</string>
 </resources>
