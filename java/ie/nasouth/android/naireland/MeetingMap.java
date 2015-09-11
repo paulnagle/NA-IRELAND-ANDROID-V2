@@ -1,7 +1,6 @@
 package ie.nasouth.android.naireland;
 
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -174,8 +173,10 @@ public class MeetingMap extends FragmentActivity {
             String meetingLocation;
             String meetingStreet;
             String meetingCounty;
-            String meetingDay;
+            int meetingDay;
             String meetingStart;
+            String meetingDayString = null;
+
             LatLng center = new LatLng(53.341318, -6.270205);
 
             mMap.addMarker(new MarkerOptions().position(center).title("NA Ireland Service Office"));
@@ -190,17 +191,45 @@ public class MeetingMap extends FragmentActivity {
                     meetingLocation  = meeting.getString("location_text");
                     meetingStreet    = meeting.getString("location_street");
                     meetingCounty    = meeting.getString("location_sub_province");
-                    meetingDay       = meeting.getString("weekday_tinyint");
+                    meetingDay       = meeting.getInt("weekday_tinyint");
                     meetingStart     = meeting.getString("start_time");
+
+                    switch (meetingDay) {
+                        case 0:
+                            meetingDayString = "Sunday";
+                            break;
+                        case 1:
+                            meetingDayString = "Monday";
+                            break;
+                        case 2:
+                            meetingDayString = "Tuesday";
+                            break;
+                        case 3:
+                            meetingDayString = "Wednesday";
+                            break;
+                        case 4:
+                            meetingDayString = "Thursday";
+                            break;
+                        case 5:
+                            meetingDayString = "Friday";
+                            break;
+                        case 6:
+                            meetingDayString = "Saturday";
+                            break;
+                    }
 
  //                   Log.d(TAG, meetingLongitude + " " + meetingLatitude + " " + meetingName + " " + meetingLocation + " " + meetingStreet + " " + meetingCounty);
 
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(meetingLatitude, meetingLongitude)));
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(meetingLatitude, meetingLongitude))
+                                                        .title(meetingName)
+                                                        .snippet(meetingStart.substring(0, 5) + "  " + meetingDayString + " \n" + meetingLocation + "\n" + meetingStreet + "\n Co. " + meetingCounty));
+
 
                 } catch (JSONException e) {
                     Log.d(TAG, "Gone wrong here!" + e);
                 }
             }
+            mMap.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater()));
         }
     }
 }
