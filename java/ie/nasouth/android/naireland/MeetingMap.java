@@ -1,9 +1,11 @@
 package ie.nasouth.android.naireland;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,6 +33,7 @@ import java.util.logging.Logger;
 
 public class MeetingMap extends FragmentActivity {
     private static final String TAG = "MeetingMap";
+    public ProgressDialog ringProgressDialog = null;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
@@ -67,8 +70,7 @@ public class MeetingMap extends FragmentActivity {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
@@ -92,12 +94,14 @@ public class MeetingMap extends FragmentActivity {
         mapSettings = mMap.getUiSettings();
         mapSettings.setZoomControlsEnabled(true);
 
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 7));
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 17));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(7), 2000, null);
+        ringProgressDialog = ProgressDialog.show(MeetingMap.this, "Please wait ...", "Downloading Meetings...", true);
+        ringProgressDialog.setCancelable(true);
 
         new retrieveAndAddMeetings().execute();
     }
+
 
     public String getJSON(String url, int timeout) {
         HttpURLConnection c = null;
@@ -157,11 +161,12 @@ public class MeetingMap extends FragmentActivity {
 
             try {
 
-                JSONArray BMLTResults =  new JSONArray(BMLTJson);
-                return BMLTResults;
+                return new JSONArray(BMLTJson);
 
             } catch (JSONException e) {
+
                 Log.d(TAG, "Gone wrong there!" + e);
+
             }
         return null;
         }
@@ -230,6 +235,7 @@ public class MeetingMap extends FragmentActivity {
                 }
             }
             mMap.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater()));
+            ringProgressDialog.dismiss();
         }
     }
 }
