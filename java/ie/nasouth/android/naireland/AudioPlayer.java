@@ -1,6 +1,7 @@
 package ie.nasouth.android.naireland;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 public class AudioPlayer extends Activity implements OnPreparedListener, MediaController.MediaPlayerControl{
     private static final String TAG = "AudioPlayer";
 
+    public ProgressDialog ringProgressDialog = null;
+
     private MediaPlayer mediaPlayer;
     private MediaController mediaController;
     private String audioFile;
@@ -36,6 +39,8 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
         audioFile = b.getString("AUDIO_FILE_NAME");
         ((TextView)findViewById(R.id.now_playing_text)).setText("Loading ....");
 
+        ringProgressDialog = ProgressDialog.show(AudioPlayer.this, "Please wait ...", "Downloading speaker mp3...", true);
+        ringProgressDialog.setCancelable(true);
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnPreparedListener(this);
@@ -122,6 +127,7 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
         handler.post(new Runnable() {
             public void run() {
                 //((TextView) findViewById(R.id.now_playing_text)).setText(audioFile);
+                ringProgressDialog.dismiss();
                 ((TextView) findViewById(R.id.now_playing_text)).setText(retreiver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
                 mediaPlayer.start();
                 mediaController.setEnabled(true);
