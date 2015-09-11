@@ -1,5 +1,24 @@
 // var DEBUG = false;
 var DEBUG = true;
+var myLat = 53.341318; // Irish Service Office
+var myLng = -6.270205;
+
+// This function uses the browser function to find our current GPS location, and update our position
+function getCurrentGPSLocation() {
+    DEBUG && console.log("****getCurrentGPSLocation()****");
+    function success(location) {
+		DEBUG && console.log("****GPS location found");
+		myLat = location.coords.latitude;
+		myLng = location.coords.longitude;
+//		$.mobile.changePage('#yesgeoDialog');
+    }
+    function fail(error) {
+		DEBUG && console.log("****GPS location NOT found");  // Failed to find location, show default map
+//		$.mobile.changePage('#nogeoDialog');
+	}
+	// Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
+	navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy:true, timeout: 6000});
+}
 
 
 $( document ).on( "pagecontainershow", function ( event, ui ) {
@@ -90,7 +109,7 @@ function runSearchCounty(county) {
 			markerContent += val.location_text + "&nbsp;" + val.location_street + "<br>";
 			markerContent += "<i>" + val.location_info + "</i></p>";
 
-			fromHere = "'" + myLatLng.lat + ',' + myLatLng.lng + "'";
+			fromHere = "'" + myLat + ',' + myLng + "'";
 			toHere   = "'" + val.latitude + ',' + val.longitude + "'";
 			markerContent += '<i class="fa fa-map-o"></i>&nbsp;<a href="http://maps.google.com/maps?daddr=';
 			markerContent += val.latitude + ',' + val.longitude;
@@ -176,3 +195,7 @@ function populateConventions() {
 
 	});
 }
+
+$( document ).ready(function() {
+	getCurrentGPSLocation();
+});

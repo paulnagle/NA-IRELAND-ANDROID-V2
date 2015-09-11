@@ -200,25 +200,25 @@ public class MeetingMap extends FragmentActivity {
                     meetingStart     = meeting.getString("start_time");
 
                     switch (meetingDay) {
-                        case 0:
+                        case 1:
                             meetingDayString = "Sunday";
                             break;
-                        case 1:
+                        case 2:
                             meetingDayString = "Monday";
                             break;
-                        case 2:
+                        case 3:
                             meetingDayString = "Tuesday";
                             break;
-                        case 3:
+                        case 4:
                             meetingDayString = "Wednesday";
                             break;
-                        case 4:
+                        case 5:
                             meetingDayString = "Thursday";
                             break;
-                        case 5:
+                        case 6:
                             meetingDayString = "Friday";
                             break;
-                        case 6:
+                        case 7:
                             meetingDayString = "Saturday";
                             break;
                     }
