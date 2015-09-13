@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -237,8 +238,6 @@ public class MeetingMap extends FragmentActivity implements
 
             LatLng center = new LatLng(53.341318, -6.270205);
 
-            mMap.addMarker(new MarkerOptions().position(center).title("NA Ireland Service Office"));
-
             for (int i=0; i < BMLTResults.length(); i++) {
                 try {
                     meeting = BMLTResults.getJSONObject(i);
@@ -277,16 +276,6 @@ public class MeetingMap extends FragmentActivity implements
                             break;
                     }
 
- //                   Log.d(TAG, meetingLongitude + " " + meetingLatitude + " " + meetingName + " " + meetingLocation + " " + meetingStreet + " " + meetingCounty);
-
-  //                  mMap.addMarker(new MarkerOptions().position(new LatLng(meetingLatitude, meetingLongitude))
-  //                                                      .title(meetingName)
-  //                                                      .snippet(meetingStart.substring(0, 5) + "  "
-  //                                                              + meetingDayString + " \n"
-  //                                                              + meetingLocation + "\n"
-  //                                                              + meetingStreet + "\n"
-  //                                                              + "Co. " + meetingCounty + "\n"
-  //                                                              + meetingInfo));
                     MyItem addMeeting = new MyItem(meetingLatitude, meetingLongitude);
                     addMeeting.setMeetingName(meetingName);
                     addMeeting.setMeetingDetails((meetingStart.substring(0, 5) + "  "
@@ -303,7 +292,7 @@ public class MeetingMap extends FragmentActivity implements
                 }
             }
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 7));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 8));
 
             ringProgressDialog.dismiss();
         }
@@ -387,8 +376,8 @@ public class MeetingMap extends FragmentActivity implements
 
 
             if (clickedCluster != null) {
-                tvTitle.setText(String.valueOf(clickedCluster.getItems().size())
-                        + " more meetings available");
+                tvTitle.setText("Zoom in for" + String.valueOf(clickedCluster.getItems().size())
+                        + "\nmore meetings.");
             }
             return myContentsView;
         }
