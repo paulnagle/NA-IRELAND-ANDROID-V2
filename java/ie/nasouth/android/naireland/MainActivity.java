@@ -18,20 +18,9 @@ import android.webkit.WebViewClient;
 import android.webkit.GeolocationPermissions;
 import android.widget.Toast;
 
-/**
- * Simple WebApp that creates a WebView for BMLT smart phone
- * webpage.
- *
- * Overloads URL loading for everything but google maps so
- * that it stays inside the webview, until a meeting is mapped,
- * so that redirection to the phones google map app can occur.
- *
- * Overloads the back button behavior to go back within the
- * webview history when possible.
- *
- * @author anonymous
- *
- */
+
+
+
 public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
@@ -65,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
         // clicking on a link, except for google maps, or any of the
         // area/region websites.
         // Also this forces tel: links to open the android dialer,
-        // and forces mailto: links to open an email
+        // mailto: links to open the email app, mp3 files to be
+        // opened by this apps media player, and meetingmap:
+        // links to be opened by this apps google maps activity
 
         webView.setWebViewClient(new WebViewClient() {
             @Override

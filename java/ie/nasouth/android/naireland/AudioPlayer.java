@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -18,6 +17,10 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * This is the activity to play mp3 files.
+ */
+
 public class AudioPlayer extends Activity implements OnPreparedListener, MediaController.MediaPlayerControl{
     private static final String TAG = "AudioPlayer";
 
@@ -27,7 +30,7 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
     private MediaController mediaController;
     private String audioFile;
     private int pausedPosition = 0;
-    private MediaMetadataRetriever retreiver = new MediaMetadataRetriever();
+    private MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
     private Handler handler = new Handler();
 
@@ -48,9 +51,9 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
         mediaController = new MediaController(this);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
-            Log.d(TAG, " Audion filename = " + audioFile);
+            Log.d(TAG, " Audio filename = " + audioFile);
             mediaPlayer.setDataSource(audioFile);
-            retreiver.setDataSource(audioFile, new HashMap<String, String>());
+            retriever.setDataSource(audioFile, new HashMap<String, String>());
             mediaPlayer.prepareAsync();
   //          mediaPlayer.start();
         } catch (IOException e) {
@@ -128,7 +131,8 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
             public void run() {
                 //((TextView) findViewById(R.id.now_playing_text)).setText(audioFile);
                 ringProgressDialog.dismiss();
-                ((TextView) findViewById(R.id.now_playing_text)).setText(retreiver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
+
+                ((TextView) findViewById(R.id.now_playing_text)).setText(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
                 mediaPlayer.start();
                 mediaController.setEnabled(true);
                 mediaController.show(0);

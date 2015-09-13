@@ -1,11 +1,13 @@
 package ie.nasouth.android.naireland;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,6 +16,9 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,9 +36,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class MeetingMap extends FragmentActivity {
+public class MeetingMap extends FragmentActivity implements
+        ClusterManager.OnClusterClickListener<MyItem>,
+        ClusterManager.OnClusterInfoWindowClickListener<MyItem>,
+        ClusterManager.OnClusterItemClickListener<MyItem>,
+        ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>
+{
     private static final String TAG = "MeetingMap";
+
     public ProgressDialog ringProgressDialog = null;
+
+    private ClusterManager<MyItem> mClusterManager;
+    private Cluster<MyItem> clickedCluster;
+    private MyItem clickedClusterItem;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
@@ -85,7 +100,47 @@ public class MeetingMap extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        LatLng center = new LatLng(53.341318, -6.270205);
+
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<MyItem>(this, mMap);
+
+        // Point the map's listeners at the listeners implemented by the cluster
+        // manager.
+        mMap.setOnCameraChangeListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
+
+        mClusterManager = new ClusterManager<MyItem>(this, mMap);
+        mMap.setOnCameraChangeListener(mClusterManager);
+        mClusterManager.setRenderer(new MyClusterRenderer(this, mMap, mClusterManager));
+
+        mMap.setOnInfoWindowClickListener(mClusterManager);
+        mMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
+
+        mClusterManager.getClusterMarkerCollection().setOnInfoWindowAdapter(new MyCustomAdapterForClusters());
+        mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new MyCustomAdapterForItems());
+
+        mMap.setOnMarkerClickListener(mClusterManager);
+        mClusterManager.setOnClusterClickListener(this);
+        mClusterManager.setOnClusterInfoWindowClickListener(this);
+        mClusterManager.setOnClusterItemClickListener(this);
+        mClusterManager.setOnClusterItemInfoWindowClickListener(this);
+
+        mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
+            @Override
+            public boolean onClusterClick(Cluster<MyItem> cluster) {
+                clickedCluster = cluster;
+                return false;
+            }
+        });
+
+        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
+            @Override
+            public boolean onClusterItemClick(MyItem item) {
+                clickedClusterItem = item;
+                return false;
+            }
+        });
 
         mMap.setMyLocationEnabled(true);
         mMap.setBuildingsEnabled(true);
@@ -94,7 +149,7 @@ public class MeetingMap extends FragmentActivity {
         mapSettings = mMap.getUiSettings();
         mapSettings.setZoomControlsEnabled(true);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 7));
+
 
         ringProgressDialog = ProgressDialog.show(MeetingMap.this, "Please wait ...", "Downloading Meetings...", true);
         ringProgressDialog.setCancelable(true);
@@ -151,13 +206,10 @@ public class MeetingMap extends FragmentActivity {
         JSONObject meeting;
 
         protected JSONArray doInBackground(Void... args) {
-            List params = new ArrayList();
-            // getting JSON string from URL
-
             final String BMLTJson;
-            JSONObject meeting;
 
-            BMLTJson = getJSON("http://bmlt.nasouth.ie/main_server/client_interface/json/?switcher=GetSearchResults", 30000);
+            BMLTJson = getJSON("http://bmlt.nasouth.ie/main_server/client_interface/json/?switcher=GetSearchResults&data_field_key=weekday_tinyint,start_time,longitude,latitude,meeting_name,location_text,location_sub_province,location_street,location_info", 30000);
+           // BMLTJson = getJSON("http://bmlt.nasouth.ie/main_server/client_interface/json/?switcher=GetSearchResults", 30000);
 
             try {
 
@@ -178,6 +230,7 @@ public class MeetingMap extends FragmentActivity {
             String meetingLocation;
             String meetingStreet;
             String meetingCounty;
+            String meetingInfo;
             int meetingDay;
             String meetingStart;
             String meetingDayString = null;
@@ -196,6 +249,7 @@ public class MeetingMap extends FragmentActivity {
                     meetingLocation  = meeting.getString("location_text");
                     meetingStreet    = meeting.getString("location_street");
                     meetingCounty    = meeting.getString("location_sub_province");
+                    meetingInfo      = meeting.getString("location_info");
                     meetingDay       = meeting.getInt("weekday_tinyint");
                     meetingStart     = meeting.getString("start_time");
 
@@ -225,17 +279,143 @@ public class MeetingMap extends FragmentActivity {
 
  //                   Log.d(TAG, meetingLongitude + " " + meetingLatitude + " " + meetingName + " " + meetingLocation + " " + meetingStreet + " " + meetingCounty);
 
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(meetingLatitude, meetingLongitude))
-                                                        .title(meetingName)
-                                                        .snippet(meetingStart.substring(0, 5) + "  " + meetingDayString + " \n" + meetingLocation + "\n" + meetingStreet + "\n Co. " + meetingCounty));
+  //                  mMap.addMarker(new MarkerOptions().position(new LatLng(meetingLatitude, meetingLongitude))
+  //                                                      .title(meetingName)
+  //                                                      .snippet(meetingStart.substring(0, 5) + "  "
+  //                                                              + meetingDayString + " \n"
+  //                                                              + meetingLocation + "\n"
+  //                                                              + meetingStreet + "\n"
+  //                                                              + "Co. " + meetingCounty + "\n"
+  //                                                              + meetingInfo));
+                    MyItem addMeeting = new MyItem(meetingLatitude, meetingLongitude);
+                    addMeeting.setMeetingName(meetingName);
+                    addMeeting.setMeetingDetails((meetingStart.substring(0, 5) + "  "
+                            + meetingDayString + " \n"
+                            + meetingLocation + "\n"
+                            + meetingStreet + "\n"
+                            + "Co. " + meetingCounty + "\n"
+                            + meetingInfo));
 
+                    mClusterManager.addItem(addMeeting);
 
                 } catch (JSONException e) {
                     Log.d(TAG, "Gone wrong here!" + e);
                 }
             }
-            mMap.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater()));
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 7));
+
             ringProgressDialog.dismiss();
         }
+
+    }
+
+
+    class MyClusterRenderer extends DefaultClusterRenderer<MyItem> {
+
+        public MyClusterRenderer(Context context, GoogleMap map, ClusterManager<MyItem> clusterManager) {
+            super(context, map, clusterManager);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(MyItem item, MarkerOptions markerOptions) {
+            super.onBeforeClusterItemRendered(item, markerOptions);
+        }
+
+        @Override
+        protected void onClusterItemRendered(MyItem clusterItem, Marker marker) {
+            super.onClusterItemRendered(clusterItem, marker);
+        }
+    }
+
+
+    // Custom adapter info view :
+
+    public class MyCustomAdapterForItems implements GoogleMap.InfoWindowAdapter {
+
+        private final View myContentsView;
+
+        MyCustomAdapterForItems() {
+            myContentsView = getLayoutInflater().inflate(R.layout.popup, null);
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            return null;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            // TODO Auto-generated method stub
+
+
+            TextView tvTitle   = ((TextView) myContentsView.findViewById(R.id.title));
+            TextView tvSnippet = ((TextView) myContentsView.findViewById(R.id.snippet));
+
+            if (clickedClusterItem != null) {
+                tvTitle.setText(clickedClusterItem.getMeetingName());
+                tvSnippet.setText(clickedClusterItem.getMeetingDetails());
+
+            }
+            return myContentsView;
+        }
+    }
+    // class for Main Clusters.
+
+    public class MyCustomAdapterForClusters implements GoogleMap.InfoWindowAdapter {
+
+        private final View myContentsView;
+
+        MyCustomAdapterForClusters() {
+            myContentsView = getLayoutInflater().inflate(
+                    R.layout.popup, null);
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            return null;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            // TODO Auto-generated method stub
+
+
+            TextView tvTitle   = ((TextView) myContentsView.findViewById(R.id.title));
+            TextView tvSnippet = ((TextView) myContentsView.findViewById(R.id.snippet));
+            tvSnippet.setVisibility(View.GONE);
+
+
+            if (clickedCluster != null) {
+                tvTitle.setText(String.valueOf(clickedCluster.getItems().size())
+                        + " more meetings available");
+            }
+            return myContentsView;
+        }
+    }
+
+
+    @Override
+    public void onClusterItemInfoWindowClick(MyItem item) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean onClusterItemClick(MyItem item) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void onClusterInfoWindowClick(Cluster<MyItem> cluster) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean onClusterClick(Cluster<MyItem> cluster) {
+        // TODO Auto-generated method stub
+        return false;
     }
 }
+
