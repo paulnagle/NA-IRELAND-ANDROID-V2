@@ -25,12 +25,11 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
 
-    // This is the starting html page for the app
-    private final String url = "file:///android_asset/index.html";
-
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // This is the starting html page for the app
+        final String url = "file:///android_asset/index.html";
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

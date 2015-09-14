@@ -4,7 +4,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
 /**
- * Created by paulnagle on 13/09/2015.
+ * An instance of this class stores everything about an individual meeting that we need to
+ * draw a marker withan infowindow on the map
  */
 public class MyItem implements ClusterItem {
     private final LatLng mPosition;

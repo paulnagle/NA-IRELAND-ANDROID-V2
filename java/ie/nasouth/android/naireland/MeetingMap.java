@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -31,8 +30,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -95,13 +92,10 @@ public class MeetingMap extends FragmentActivity implements
     }
 
     /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
+     * This is where we can add markers or lines, add listeners or move the camera.
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
         mClusterManager = new ClusterManager<MyItem>(this, mMap);
@@ -110,18 +104,12 @@ public class MeetingMap extends FragmentActivity implements
         // manager.
         mMap.setOnCameraChangeListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
-
-        mClusterManager = new ClusterManager<MyItem>(this, mMap);
-        mMap.setOnCameraChangeListener(mClusterManager);
-        mClusterManager.setRenderer(new MyClusterRenderer(this, mMap, mClusterManager));
-
         mMap.setOnInfoWindowClickListener(mClusterManager);
         mMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
 
+        mClusterManager.setRenderer(new MyClusterRenderer(this, mMap, mClusterManager));
         mClusterManager.getClusterMarkerCollection().setOnInfoWindowAdapter(new MyCustomAdapterForClusters());
         mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new MyCustomAdapterForItems());
-
-        mMap.setOnMarkerClickListener(mClusterManager);
         mClusterManager.setOnClusterClickListener(this);
         mClusterManager.setOnClusterInfoWindowClickListener(this);
         mClusterManager.setOnClusterItemClickListener(this);
@@ -150,14 +138,11 @@ public class MeetingMap extends FragmentActivity implements
         mapSettings = mMap.getUiSettings();
         mapSettings.setZoomControlsEnabled(true);
 
-
-
-        ringProgressDialog = ProgressDialog.show(MeetingMap.this, "Please wait ...", "Downloading Meetings...", true);
+        ringProgressDialog = ProgressDialog.show(MeetingMap.this, "Please wait ...", "Downloading Meeting Info...", true);
         ringProgressDialog.setCancelable(true);
 
         new retrieveAndAddMeetings().execute();
     }
-
 
     public String getJSON(String url, int timeout) {
         HttpURLConnection c = null;
@@ -186,9 +171,7 @@ public class MeetingMap extends FragmentActivity implements
                     return sb.toString();
             }
 
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        }  catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (c != null) {
@@ -335,9 +318,6 @@ public class MeetingMap extends FragmentActivity implements
 
         @Override
         public View getInfoWindow(Marker marker) {
-            // TODO Auto-generated method stub
-
-
             TextView tvTitle   = ((TextView) myContentsView.findViewById(R.id.title));
             TextView tvSnippet = ((TextView) myContentsView.findViewById(R.id.snippet));
 
@@ -356,8 +336,7 @@ public class MeetingMap extends FragmentActivity implements
         private final View myContentsView;
 
         MyCustomAdapterForClusters() {
-            myContentsView = getLayoutInflater().inflate(
-                    R.layout.popup, null);
+            myContentsView = getLayoutInflater().inflate(R.layout.popup, null);
         }
 
         @Override
@@ -367,13 +346,9 @@ public class MeetingMap extends FragmentActivity implements
 
         @Override
         public View getInfoWindow(Marker marker) {
-            // TODO Auto-generated method stub
-
-
             TextView tvTitle   = ((TextView) myContentsView.findViewById(R.id.title));
             TextView tvSnippet = ((TextView) myContentsView.findViewById(R.id.snippet));
             tvSnippet.setVisibility(View.GONE);
-
 
             if (clickedCluster != null) {
                 tvTitle.setText("Zoom in for" + String.valueOf(clickedCluster.getItems().size())
@@ -386,24 +361,21 @@ public class MeetingMap extends FragmentActivity implements
 
     @Override
     public void onClusterItemInfoWindowClick(MyItem item) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public boolean onClusterItemClick(MyItem item) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void onClusterInfoWindowClick(Cluster<MyItem> cluster) {
-        // TODO Auto-generated method stub
+
     }
 
     @Override
     public boolean onClusterClick(Cluster<MyItem> cluster) {
-        // TODO Auto-generated method stub
         return false;
     }
 }

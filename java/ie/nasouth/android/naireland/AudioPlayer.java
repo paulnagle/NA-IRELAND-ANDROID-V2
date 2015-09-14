@@ -28,13 +28,15 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
 
     private MediaPlayer mediaPlayer;
     private MediaController mediaController;
-    private String audioFile;
+
     private int pausedPosition = 0;
     private MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
     private Handler handler = new Handler();
 
     public void onCreate(Bundle savedInstanceState) {
+        String audioFile;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_player);
 
@@ -42,7 +44,7 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
         audioFile = b.getString("AUDIO_FILE_NAME");
         ((TextView)findViewById(R.id.now_playing_text)).setText("Loading ....");
 
-        ringProgressDialog = ProgressDialog.show(AudioPlayer.this, "Please wait ...", "Downloading speaker mp3...", true);
+        ringProgressDialog = ProgressDialog.show(AudioPlayer.this, "Please wait...", "Buffering...", true);
         ringProgressDialog.setCancelable(true);
 
         mediaPlayer = new MediaPlayer();
@@ -55,7 +57,6 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
             mediaPlayer.setDataSource(audioFile);
             retriever.setDataSource(audioFile, new HashMap<String, String>());
             mediaPlayer.prepareAsync();
-  //          mediaPlayer.start();
         } catch (IOException e) {
             Log.e(TAG, "Could not open file " + audioFile + " for playback.", e);
         }
@@ -129,7 +130,6 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
 
         handler.post(new Runnable() {
             public void run() {
-                //((TextView) findViewById(R.id.now_playing_text)).setText(audioFile);
                 ringProgressDialog.dismiss();
 
                 ((TextView) findViewById(R.id.now_playing_text)).setText(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
@@ -147,7 +147,6 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
 
         mediaPlayer.pause();
         pausedPosition = mediaPlayer.getCurrentPosition();
-        Log.d(TAG, " onPause : pausedPosition = " + pausedPosition);
     }
 
     @Override
