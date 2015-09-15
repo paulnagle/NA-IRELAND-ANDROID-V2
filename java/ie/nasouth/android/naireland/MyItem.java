@@ -13,6 +13,7 @@ public class MyItem implements ClusterItem {
     public String meetingDetails;
 
     public MyItem(double lat, double lng) {
+
         mPosition = new LatLng(lat, lng);
     }
 
@@ -25,6 +26,8 @@ public class MyItem implements ClusterItem {
         return meetingName;
     }
 
+    public LatLng getMeetingOverlapIndex() { return mPosition; }
+
     public void setMeetingName(String meetingName) {
         this.meetingName = meetingName;
     }
@@ -35,6 +38,10 @@ public class MyItem implements ClusterItem {
 
     public void setMeetingDetails(String meetingDetails) {
         this.meetingDetails = meetingDetails;
+    }
+
+    public void addColocatedMeetingDetails(String colocatedMeetingDetails) {
+        this.meetingDetails = this.meetingDetails + "\n\n-------------------------------\n\n" + colocatedMeetingDetails;
     }
 
 }

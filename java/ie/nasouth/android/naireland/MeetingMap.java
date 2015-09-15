@@ -30,6 +30,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -218,6 +221,7 @@ public class MeetingMap extends FragmentActivity implements
             int meetingDay;
             String meetingStart;
             String meetingDayString = null;
+            HashMap<LatLng, MyItem> meetingHashMap = new HashMap<>();
 
             LatLng center = new LatLng(53.341318, -6.270205);
 
@@ -268,12 +272,19 @@ public class MeetingMap extends FragmentActivity implements
                             + "Co. " + meetingCounty + "\n"
                             + meetingInfo));
 
+                    meetingHashMap.put(addMeeting.getPosition(), addMeeting);
+
                     mClusterManager.addItem(addMeeting);
 
                 } catch (JSONException e) {
                     Log.d(TAG, "Gone wrong here!" + e);
                 }
             }
+
+            // Now cycle through the hashmap, if any colocated meetings exist, combine
+            // them into one MyItem, and delete the spares.
+            // Then add the remaining MyItems to the mClusterManager
+
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 8));
 
