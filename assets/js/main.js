@@ -1,5 +1,5 @@
-// var DEBUG = false;
-var DEBUG = true;
+var DEBUG = false;
+// var DEBUG = true;
 var myLat = 53.341318; // Irish Service Office
 var myLng = -6.270205;
 
@@ -72,7 +72,6 @@ $( document ).on( "mobileinit", function() {
 function dayOfWeekAsString(dayIndex) {
 	return ["not a day?", "Sun", "Mon","Tue","Wed","Thu","Fri","Sat"][dayIndex];
 }
-
 
 // This function runs the query to the BMLT and displays the results per county
 function runSearchCounty(county) {

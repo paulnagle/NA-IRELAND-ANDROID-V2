@@ -31,7 +31,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,8 +39,8 @@ public class MeetingMap extends FragmentActivity implements
         ClusterManager.OnClusterClickListener<MyMeetingLocation>,
         ClusterManager.OnClusterInfoWindowClickListener<MyMeetingLocation>,
         ClusterManager.OnClusterItemClickListener<MyMeetingLocation>,
-        ClusterManager.OnClusterItemInfoWindowClickListener<MyMeetingLocation>
-{
+        ClusterManager.OnClusterItemInfoWindowClickListener<MyMeetingLocation> {
+
     private static final String TAG = "MeetingMap";
 
     public ProgressDialog ringProgressDialog = null;
@@ -195,16 +194,11 @@ public class MeetingMap extends FragmentActivity implements
             final String BMLTJson;
 
             BMLTJson = getJSON("http://bmlt.nasouth.ie/main_server/client_interface/json/?switcher=GetSearchResults&data_field_key=weekday_tinyint,start_time,longitude,latitude,meeting_name,location_text,location_sub_province,location_street,location_info&sort_keys=longitude,latitude", 30000);
-           // BMLTJson = getJSON("http://bmlt.nasouth.ie/main_server/client_interface/json/?switcher=GetSearchResults", 30000);
 
             try {
-
                 return new JSONArray(BMLTJson);
-
             } catch (JSONException e) {
-
                 Log.d(TAG, "Gone wrong there!" + e);
-
             }
         return null;
         }
@@ -238,7 +232,6 @@ public class MeetingMap extends FragmentActivity implements
                     meetingDay       = meeting.getInt("weekday_tinyint");
                     meetingStart     = meeting.getString("start_time");
 
-
                     MyMeetingLocation addMeeting = new MyMeetingLocation(meetingLatitude, meetingLongitude);
                     addMeeting.setMeetingName(meetingName);
                     addMeeting.setMeetingAddress((meetingLocation + "\n"
@@ -256,8 +249,8 @@ public class MeetingMap extends FragmentActivity implements
                                 meetingLongitude,
                                 meetingLocations.get(meetingLocations.size() - 1).getLat(),
                                 meetingLocations.get(meetingLocations.size() - 1).getLong(),
-                                dist );
-                        Log.d(TAG, "testing what is dist  " + dist[0]);
+                                dist);
+
                         // If dist[0] is greater than 20 meters then this meeting and the last one are more than 20 meters apart, so they are
                         // in seperate locations! We only need to check against the last location because
                         // we got the list from the BMLT sorted by lat and long!
@@ -266,7 +259,6 @@ public class MeetingMap extends FragmentActivity implements
                         }
                         meetingLocations.get(meetingLocations.size() - 1).addMeetingTime(meetingDay, meetingStart);
                     }
-
 
                 } catch (JSONException e) {
                     Log.d(TAG, "Gone wrong here!" + e);
@@ -326,8 +318,7 @@ public class MeetingMap extends FragmentActivity implements
 
             if (clickedClusterItem != null) {
                 tvTitle.setText(clickedClusterItem.getMeetingName());
-                tvSnippet.setText(clickedClusterItem.getlocationMeetingTimes());
-
+                tvSnippet.setText(clickedClusterItem.getLocationMeetingTimes());
             }
             return myContentsView;
         }

@@ -65,16 +65,16 @@ public class MyMeetingLocation implements ClusterItem {
         this.meetingTimes[dayOfWeek].add(meetingTime);
     }
 
-    public String getlocationMeetingTimes() {
+    public String getLocationMeetingTimes() {
         StringBuilder meetingLocationDetails = new StringBuilder();
 
         meetingLocationDetails.append(meetingAddress);
         meetingLocationDetails.append("\n");
 
         for (int x = 1; x < meetingTimes.length ; x++) {
-            meetingLocationDetails.append(intToDayOfWeek(x) + " : ");
+            meetingLocationDetails.append(intToDayOfWeek(x)).append("\t\t: ");
             for (String meetingTime: meetingTimes[x])
-                meetingLocationDetails.append(meetingTime + " ");
+                meetingLocationDetails.append(meetingTime.substring(0,5)).append(" ");
             meetingLocationDetails.append("\n");
         }
 
@@ -94,7 +94,7 @@ public class MyMeetingLocation implements ClusterItem {
             case 5:
                 return "Thu";
             case 6:
-                return "Fri";
+                return "Fri ";
             case 7:
                 return "Sat";
             default:
