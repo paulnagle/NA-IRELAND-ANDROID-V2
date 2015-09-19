@@ -2,6 +2,7 @@ package ie.nasouth.android.naireland;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -28,28 +29,26 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 public class MeetingMap extends FragmentActivity implements
-        ClusterManager.OnClusterClickListener<MyItem>,
-        ClusterManager.OnClusterInfoWindowClickListener<MyItem>,
-        ClusterManager.OnClusterItemClickListener<MyItem>,
-        ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>
+        ClusterManager.OnClusterClickListener<MyMeetingLocation>,
+        ClusterManager.OnClusterInfoWindowClickListener<MyMeetingLocation>,
+        ClusterManager.OnClusterItemClickListener<MyMeetingLocation>,
+        ClusterManager.OnClusterItemInfoWindowClickListener<MyMeetingLocation>
 {
     private static final String TAG = "MeetingMap";
 
     public ProgressDialog ringProgressDialog = null;
 
-    private ClusterManager<MyItem> mClusterManager;
-    private Cluster<MyItem> clickedCluster;
-    private MyItem clickedClusterItem;
+    private ClusterManager<MyMeetingLocation> mClusterManager;
+    private Cluster<MyMeetingLocation> clickedCluster;
+    private MyMeetingLocation clickedClusterItem;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
@@ -101,7 +100,7 @@ public class MeetingMap extends FragmentActivity implements
     private void setUpMap() {
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
-        mClusterManager = new ClusterManager<MyItem>(this, mMap);
+        mClusterManager = new ClusterManager<MyMeetingLocation>(this, mMap);
 
         // Point the map's listeners at the listeners implemented by the cluster
         // manager.
@@ -118,17 +117,17 @@ public class MeetingMap extends FragmentActivity implements
         mClusterManager.setOnClusterItemClickListener(this);
         mClusterManager.setOnClusterItemInfoWindowClickListener(this);
 
-        mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
+        mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyMeetingLocation>() {
             @Override
-            public boolean onClusterClick(Cluster<MyItem> cluster) {
+            public boolean onClusterClick(Cluster<MyMeetingLocation> cluster) {
                 clickedCluster = cluster;
                 return false;
             }
         });
 
-        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
+        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyMeetingLocation>() {
             @Override
-            public boolean onClusterItemClick(MyItem item) {
+            public boolean onClusterItemClick(MyMeetingLocation item) {
                 clickedClusterItem = item;
                 return false;
             }
@@ -195,7 +194,7 @@ public class MeetingMap extends FragmentActivity implements
         protected JSONArray doInBackground(Void... args) {
             final String BMLTJson;
 
-            BMLTJson = getJSON("http://bmlt.nasouth.ie/main_server/client_interface/json/?switcher=GetSearchResults&data_field_key=weekday_tinyint,start_time,longitude,latitude,meeting_name,location_text,location_sub_province,location_street,location_info", 30000);
+            BMLTJson = getJSON("http://bmlt.nasouth.ie/main_server/client_interface/json/?switcher=GetSearchResults&data_field_key=weekday_tinyint,start_time,longitude,latitude,meeting_name,location_text,location_sub_province,location_street,location_info&sort_keys=longitude,latitude", 30000);
            // BMLTJson = getJSON("http://bmlt.nasouth.ie/main_server/client_interface/json/?switcher=GetSearchResults", 30000);
 
             try {
@@ -211,8 +210,8 @@ public class MeetingMap extends FragmentActivity implements
         }
 
         protected void onPostExecute(JSONArray BMLTResults) {
-            Double meetingLongitude;
-            Double meetingLatitude;
+            double meetingLongitude;
+            double meetingLatitude;
             String meetingName;
             String meetingLocation;
             String meetingStreet;
@@ -220,8 +219,8 @@ public class MeetingMap extends FragmentActivity implements
             String meetingInfo;
             int meetingDay;
             String meetingStart;
-            String meetingDayString = null;
-            HashMap<LatLng, MyItem> meetingHashMap = new HashMap<>();
+            ArrayList<MyMeetingLocation> meetingLocations = new ArrayList<>();
+            float [] dist = new float[1];
 
             LatLng center = new LatLng(53.341318, -6.270205);
 
@@ -239,52 +238,47 @@ public class MeetingMap extends FragmentActivity implements
                     meetingDay       = meeting.getInt("weekday_tinyint");
                     meetingStart     = meeting.getString("start_time");
 
-                    switch (meetingDay) {
-                        case 1:
-                            meetingDayString = "Sunday";
-                            break;
-                        case 2:
-                            meetingDayString = "Monday";
-                            break;
-                        case 3:
-                            meetingDayString = "Tuesday";
-                            break;
-                        case 4:
-                            meetingDayString = "Wednesday";
-                            break;
-                        case 5:
-                            meetingDayString = "Thursday";
-                            break;
-                        case 6:
-                            meetingDayString = "Friday";
-                            break;
-                        case 7:
-                            meetingDayString = "Saturday";
-                            break;
+
+                    MyMeetingLocation addMeeting = new MyMeetingLocation(meetingLatitude, meetingLongitude);
+                    addMeeting.setMeetingName(meetingName);
+                    addMeeting.setMeetingAddress((meetingLocation + "\n"
+                                                    + meetingStreet + "\n"
+                                                    + "Co. " + meetingCounty + "\n"
+                                                    + meetingInfo));
+
+                    if (meetingLocations.size() == 0) {
+                        // First meeting, so just add it
+                        meetingLocations.add(addMeeting);
+                        // Add the time of th2 meeting too!
+                        meetingLocations.get(meetingLocations.size() - 1).addMeetingTime(meetingDay, meetingStart);
+                    } else {
+                        Location.distanceBetween(meetingLatitude,
+                                meetingLongitude,
+                                meetingLocations.get(meetingLocations.size() - 1).getLong(),
+                                meetingLocations.get(meetingLocations.size() - 1).getLat(),
+                                dist );
+                        Log.d(TAG, "testing what is dist  " + dist);
+                        // This meeting and the last one are more than 20 meters apart, so they are
+                        // in seperate locations! We only need to check against the last location because
+                        // we got the list from the BMLT sorted by lat and long!
+                        if (dist[0] >= 20) {
+                            meetingLocations.add(addMeeting);
+                        } else {
+                            meetingLocations.get(meetingLocations.size() - 1).addMeetingTime(meetingDay, meetingStart);
+                        }
+
                     }
 
-                    MyItem addMeeting = new MyItem(meetingLatitude, meetingLongitude);
-                    addMeeting.setMeetingName(meetingName);
-                    addMeeting.setMeetingDetails((meetingStart.substring(0, 5) + "  "
-                            + meetingDayString + " \n"
-                            + meetingLocation + "\n"
-                            + meetingStreet + "\n"
-                            + "Co. " + meetingCounty + "\n"
-                            + meetingInfo));
-
-                    meetingHashMap.put(addMeeting.getPosition(), addMeeting);
-
-                    mClusterManager.addItem(addMeeting);
 
                 } catch (JSONException e) {
                     Log.d(TAG, "Gone wrong here!" + e);
                 }
             }
 
-            // Now cycle through the hashmap, if any colocated meetings exist, combine
-            // them into one MyItem, and delete the spares.
-            // Then add the remaining MyItems to the mClusterManager
-
+            // Now loop through the
+            for (MyMeetingLocation mapMeetingLocation: meetingLocations) {
+                mClusterManager.addItem(mapMeetingLocation);
+            }
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 8));
 
@@ -294,19 +288,19 @@ public class MeetingMap extends FragmentActivity implements
     }
 
 
-    class MyClusterRenderer extends DefaultClusterRenderer<MyItem> {
+    class MyClusterRenderer extends DefaultClusterRenderer<MyMeetingLocation> {
 
-        public MyClusterRenderer(Context context, GoogleMap map, ClusterManager<MyItem> clusterManager) {
+        public MyClusterRenderer(Context context, GoogleMap map, ClusterManager<MyMeetingLocation> clusterManager) {
             super(context, map, clusterManager);
         }
 
         @Override
-        protected void onBeforeClusterItemRendered(MyItem item, MarkerOptions markerOptions) {
+        protected void onBeforeClusterItemRendered(MyMeetingLocation item, MarkerOptions markerOptions) {
             super.onBeforeClusterItemRendered(item, markerOptions);
         }
 
         @Override
-        protected void onClusterItemRendered(MyItem clusterItem, Marker marker) {
+        protected void onClusterItemRendered(MyMeetingLocation clusterItem, Marker marker) {
             super.onClusterItemRendered(clusterItem, marker);
         }
     }
@@ -334,7 +328,7 @@ public class MeetingMap extends FragmentActivity implements
 
             if (clickedClusterItem != null) {
                 tvTitle.setText(clickedClusterItem.getMeetingName());
-                tvSnippet.setText(clickedClusterItem.getMeetingDetails());
+                tvSnippet.setText(clickedClusterItem.getMeetingAddress());
 
             }
             return myContentsView;
@@ -371,22 +365,22 @@ public class MeetingMap extends FragmentActivity implements
 
 
     @Override
-    public void onClusterItemInfoWindowClick(MyItem item) {
+    public void onClusterItemInfoWindowClick(MyMeetingLocation item) {
 
     }
 
     @Override
-    public boolean onClusterItemClick(MyItem item) {
+    public boolean onClusterItemClick(MyMeetingLocation item) {
         return false;
     }
 
     @Override
-    public void onClusterInfoWindowClick(Cluster<MyItem> cluster) {
+    public void onClusterInfoWindowClick(Cluster<MyMeetingLocation> cluster) {
 
     }
 
     @Override
-    public boolean onClusterClick(Cluster<MyItem> cluster) {
+    public boolean onClusterClick(Cluster<MyMeetingLocation> cluster) {
         return false;
     }
 }
