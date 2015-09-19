@@ -249,24 +249,22 @@ public class MeetingMap extends FragmentActivity implements
                     if (meetingLocations.size() == 0) {
                         // First meeting, so just add it
                         meetingLocations.add(addMeeting);
-                        // Add the time of th2 meeting too!
-                        meetingLocations.get(meetingLocations.size() - 1).addMeetingTime(meetingDay, meetingStart);
+                        // Add the time of the meeting too!
+                        meetingLocations.get(0).addMeetingTime(meetingDay, meetingStart);
                     } else {
                         Location.distanceBetween(meetingLatitude,
                                 meetingLongitude,
-                                meetingLocations.get(meetingLocations.size() - 1).getLong(),
                                 meetingLocations.get(meetingLocations.size() - 1).getLat(),
+                                meetingLocations.get(meetingLocations.size() - 1).getLong(),
                                 dist );
-                        Log.d(TAG, "testing what is dist  " + dist);
-                        // This meeting and the last one are more than 20 meters apart, so they are
+                        Log.d(TAG, "testing what is dist  " + dist[0]);
+                        // If dist[0] is greater than 20 meters then this meeting and the last one are more than 20 meters apart, so they are
                         // in seperate locations! We only need to check against the last location because
                         // we got the list from the BMLT sorted by lat and long!
                         if (dist[0] >= 20) {
                             meetingLocations.add(addMeeting);
-                        } else {
-                            meetingLocations.get(meetingLocations.size() - 1).addMeetingTime(meetingDay, meetingStart);
                         }
-
+                        meetingLocations.get(meetingLocations.size() - 1).addMeetingTime(meetingDay, meetingStart);
                     }
 
 
@@ -275,7 +273,7 @@ public class MeetingMap extends FragmentActivity implements
                 }
             }
 
-            // Now loop through the
+            // Now loop through the list of meeting locations, adding them to the map.
             for (MyMeetingLocation mapMeetingLocation: meetingLocations) {
                 mClusterManager.addItem(mapMeetingLocation);
             }
@@ -328,7 +326,7 @@ public class MeetingMap extends FragmentActivity implements
 
             if (clickedClusterItem != null) {
                 tvTitle.setText(clickedClusterItem.getMeetingName());
-                tvSnippet.setText(clickedClusterItem.getMeetingAddress());
+                tvSnippet.setText(clickedClusterItem.getlocationMeetingTimes());
 
             }
             return myContentsView;
@@ -356,8 +354,8 @@ public class MeetingMap extends FragmentActivity implements
             tvSnippet.setVisibility(View.GONE);
 
             if (clickedCluster != null) {
-                tvTitle.setText("Zoom in for" + String.valueOf(clickedCluster.getItems().size())
-                        + "\nmore meetings.");
+                tvTitle.setText("Zoom in for " + String.valueOf(clickedCluster.getItems().size())
+                        + "\nmore meeting locations.");
             }
             return myContentsView;
         }

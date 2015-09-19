@@ -4,7 +4,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An instance of this class stores everything about an individual meeting that we need to
@@ -18,7 +17,7 @@ public class MyMeetingLocation implements ClusterItem {
     public String meetingAddress;
 
     // An array of ArrayLists to store the list of daily meetings times
-    public ArrayList<String>[]  meetingTimes = new ArrayList[7];
+    public ArrayList<String>[]  meetingTimes = new ArrayList[8];
 
 
     public MyMeetingLocation(double lat, double lng) {
@@ -26,6 +25,11 @@ public class MyMeetingLocation implements ClusterItem {
         mPosition = new LatLng(lat, lng);
         this.lat = lat;
         this.lng = lng;
+
+        for (int x = 0; x < meetingTimes.length; x++) {
+            meetingTimes[x] = new ArrayList<>();
+        }
+
     }
 
     @Override
@@ -61,4 +65,40 @@ public class MyMeetingLocation implements ClusterItem {
         this.meetingTimes[dayOfWeek].add(meetingTime);
     }
 
+    public String getlocationMeetingTimes() {
+        StringBuilder meetingLocationDetails = new StringBuilder();
+
+        meetingLocationDetails.append(meetingAddress);
+        meetingLocationDetails.append("\n");
+
+        for (int x = 1; x < meetingTimes.length ; x++) {
+            meetingLocationDetails.append(intToDayOfWeek(x) + " : ");
+            for (String meetingTime: meetingTimes[x])
+                meetingLocationDetails.append(meetingTime + " ");
+            meetingLocationDetails.append("\n");
+        }
+
+        return meetingLocationDetails.toString();
+    }
+
+    public String intToDayOfWeek(int i) {
+        switch (i) {
+            case 1:
+                return "Sun";
+            case 2:
+                return "Mon";
+            case 3:
+                return "Tue";
+            case 4:
+                return "Wed";
+            case 5:
+                return "Thu";
+            case 6:
+                return "Fri";
+            case 7:
+                return "Sat";
+            default:
+                return "???";
+        }
+    }
 }
