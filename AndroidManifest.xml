@@ -43,7 +43,8 @@
 
         <activity
             android:name=".MeetingMap"
-            android:label="@string/title_activity_meeting_map" >
+            android:label="@string/title_activity_meeting_map"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
