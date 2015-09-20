@@ -15,6 +15,7 @@ public class MyMeetingLocation implements ClusterItem {
     public double lng;
     public String meetingName;
     public String meetingAddress;
+    public String meetingFormats;
 
     // An array of ArrayLists to store the list of daily meetings times
     public ArrayList<String>[]  meetingTimes = new ArrayList[8];
@@ -61,8 +62,22 @@ public class MyMeetingLocation implements ClusterItem {
         this.meetingAddress = meetingAddress;
     }
 
-    public void addMeetingTime(int dayOfWeek, String meetingTime) {
-        this.meetingTimes[dayOfWeek].add(meetingTime);
+    public void setMeetingFormats(String meetingFormats) {
+        this.meetingFormats = meetingFormats;
+    }
+
+    public String getMeetingFormats() {
+        return this.meetingFormats;
+    }
+
+    public void addMeetingTime(int dayOfWeek, String meetingTime, String meetingFormats) {
+        StringBuilder timePlusFormat = new StringBuilder();
+        if (!meetingFormats.contentEquals("")) {
+            timePlusFormat.append(meetingTime.substring(0, 5)).append(" (").append(meetingFormats).append(" ) ");
+        } else {
+            timePlusFormat.append(meetingTime.substring(0, 5)).append(" ");
+        }
+        this.meetingTimes[dayOfWeek].add(timePlusFormat.toString());
     }
 
     public String getLocationMeetingTimes() {
@@ -73,8 +88,10 @@ public class MyMeetingLocation implements ClusterItem {
 
         for (int x = 1; x < meetingTimes.length ; x++) {
             meetingLocationDetails.append(intToDayOfWeek(x)).append("\t\t: ");
-            for (String meetingTime: meetingTimes[x])
-                meetingLocationDetails.append(meetingTime.substring(0,5)).append(" ");
+            for (String meetingTime: meetingTimes[x]) {
+                meetingLocationDetails.append(meetingTime);
+
+            }
             meetingLocationDetails.append("\n");
         }
 

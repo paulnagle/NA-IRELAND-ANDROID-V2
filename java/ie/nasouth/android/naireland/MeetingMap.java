@@ -193,7 +193,7 @@ public class MeetingMap extends FragmentActivity implements
         protected JSONArray doInBackground(Void... args) {
             final String BMLTJson;
 
-            BMLTJson = getJSON("http://bmlt.nasouth.ie/main_server/client_interface/json/?switcher=GetSearchResults&data_field_key=weekday_tinyint,start_time,longitude,latitude,meeting_name,location_text,location_sub_province,location_street,location_info&sort_keys=longitude,latitude", 30000);
+            BMLTJson = getJSON("http://bmlt.nasouth.ie/main_server/client_interface/json/?switcher=GetSearchResults&data_field_key=weekday_tinyint,start_time,longitude,latitude,meeting_name,location_text,location_sub_province,location_street,location_info,formats&sort_keys=longitude,latitude", 30000);
 
             try {
                 return new JSONArray(BMLTJson);
@@ -211,6 +211,7 @@ public class MeetingMap extends FragmentActivity implements
             String meetingStreet;
             String meetingCounty;
             String meetingInfo;
+            String meetingFormats;
             int meetingDay;
             String meetingStart;
             ArrayList<MyMeetingLocation> meetingLocations = new ArrayList<>();
@@ -229,6 +230,7 @@ public class MeetingMap extends FragmentActivity implements
                     meetingStreet    = meeting.getString("location_street");
                     meetingCounty    = meeting.getString("location_sub_province");
                     meetingInfo      = meeting.getString("location_info");
+                    meetingFormats   = meeting.getString("formats");
                     meetingDay       = meeting.getInt("weekday_tinyint");
                     meetingStart     = meeting.getString("start_time");
 
@@ -238,12 +240,13 @@ public class MeetingMap extends FragmentActivity implements
                                                     + meetingStreet + "\n"
                                                     + "Co. " + meetingCounty + "\n"
                                                     + meetingInfo));
+                    addMeeting.setMeetingFormats(meetingFormats);
 
                     if (meetingLocations.size() == 0) {
                         // First meeting, so just add it
                         meetingLocations.add(addMeeting);
                         // Add the time of the meeting too!
-                        meetingLocations.get(0).addMeetingTime(meetingDay, meetingStart);
+                        meetingLocations.get(0).addMeetingTime(meetingDay, meetingStart, meetingFormats);
                     } else {
                         Location.distanceBetween(meetingLatitude,
                                 meetingLongitude,
@@ -254,10 +257,10 @@ public class MeetingMap extends FragmentActivity implements
                         // If dist[0] is greater than 20 meters then this meeting and the last one are more than 20 meters apart, so they are
                         // in seperate locations! We only need to check against the last location because
                         // we got the list from the BMLT sorted by lat and long!
-                        if (dist[0] >= 20) {
+                        if (dist[0] > 20) {
                             meetingLocations.add(addMeeting);
                         }
-                        meetingLocations.get(meetingLocations.size() - 1).addMeetingTime(meetingDay, meetingStart);
+                        meetingLocations.get(meetingLocations.size() - 1).addMeetingTime(meetingDay, meetingStart, meetingFormats);
                     }
 
                 } catch (JSONException e) {
