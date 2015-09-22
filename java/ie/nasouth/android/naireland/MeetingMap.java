@@ -190,7 +190,6 @@ public class MeetingMap extends FragmentActivity implements
         return null;
     }
 
-
     class retrieveAndAddMeetings extends AsyncTask< Void, Void, JSONArray > {
         JSONObject meeting;
 
