@@ -2,7 +2,10 @@ package ie.nasouth.android.naireland;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -255,7 +259,7 @@ public class MeetingMap extends FragmentActivity implements
                                 dist);
 
                         // If dist[0] is greater than 20 meters then this meeting and the last one are more than 20 meters apart, so they are
-                        // in seperate locations! We only need to check against the last location because
+                        // in separate locations! We only need to check against the last location because
                         // we got the list from the BMLT sorted by lat and long!
                         if (dist[0] > 20) {
                             meetingLocations.add(addMeeting);
@@ -273,8 +277,21 @@ public class MeetingMap extends FragmentActivity implements
                 mClusterManager.addItem(mapMeetingLocation);
             }
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 8));
+            // Move the map to the current location, if available
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
 
+            Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+            if (location != null) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                        .zoom(10)                   // Sets the zoom
+                        .build();                   // Creates a CameraPosition from the builder
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            } else {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 10));
+            }
             ringProgressDialog.dismiss();
         }
 

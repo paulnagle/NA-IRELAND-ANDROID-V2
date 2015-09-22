@@ -19,8 +19,6 @@ import android.webkit.GeolocationPermissions;
 import android.widget.Toast;
 
 
-
-
 public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
@@ -49,14 +47,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Forces web view not to re-direct to a browser when
-        // clicking on a link, except for google maps, or any of the
-        // area/region websites.
-        // Also this forces tel: links to open the android dialer,
-        // mailto: links to open the email app, mp3 files to be
-        // opened by this apps media player, and meetingmap:
-        // links to be opened by this apps google maps activity
-
+        /**
+        * Forces web view not to re-direct to a browser when
+        * clicking on a link, except for google maps, or any of the
+        * area/region websites.
+        * Also this forces tel: links to open the android dialer,
+        * mailto: links to open the email app, mp3 files to be
+        * opened by this apps media player, and meetingmap:
+        * links to be opened by this apps google maps activity
+        */
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -202,11 +201,7 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy(); // Always call the superclass method first
 
-        webView.stopLoading();
-        webView.setWebChromeClient(null);
-        webView.setWebViewClient(null);
-        webView.destroy();
-        webView = null;
+        Toast.makeText(MainActivity.this,"Keep coming back!",Toast.LENGTH_LONG).show();
     }
 
 }
