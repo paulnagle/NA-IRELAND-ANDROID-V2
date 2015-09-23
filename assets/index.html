@@ -26,7 +26,7 @@
 		<div role="main" class="ui-content">
 			<ul data-role="listview" data-inset="true">
 				<li><a href="#search-county" class="ui-btn ui-shadow ui-corner-all">Meetings List</a></li>
-				<li><a href="meetingmap:meetingmap"    class="ui-btn ui-shadow ui-corner-all">Meetings Map</a></li>
+				<li><a href="meetingmap:meetingmap"    class="ui-btn ui-shadow ui-corner-all">Meeting Locations Map</a></li>
 				<li><a href="#justfortoday"  class="ui-btn ui-shadow ui-corner-all">Just For Today</a></li>
 				<li><a href="#speakers"      class="ui-btn ui-shadow ui-corner-all">NA Speakers</a></li>
 				<li><a href="#events"        class="ui-btn ui-shadow ui-corner-all">Events & Conventions</a></li>
@@ -59,12 +59,10 @@
 			<ul data-role="listview" data-inset="true">
 				<li><a href="#county-search-results"   onclick="runSearchCounty('Antrim');"    class="ui-btn ui-shadow ui-corner-all" >Antrim</a></li>
 				<li><a href="#county-search-results"   onclick="runSearchCounty('Armagh');"    class="ui-btn ui-shadow ui-corner-all" >Armagh</a></li>
-				<li><a href="#county-search-results"   onclick="runSearchCounty('Cavan');"     class="ui-btn ui-shadow ui-corner-all" >Cavan</a></li>
 				<li><a href="#county-search-results"   onclick="runSearchCounty('Down');"      class="ui-btn ui-shadow ui-corner-all" >Down</a></li>
 				<li><a href="#county-search-results"   onclick="runSearchCounty('Derry');"     class="ui-btn ui-shadow ui-corner-all" >Derry</a></li>
 				<li><a href="#county-search-results"   onclick="runSearchCounty('Donegal');"   class="ui-btn ui-shadow ui-corner-all" >Donegal</a></li>
 				<li><a href="#county-search-results"   onclick="runSearchCounty('Fermanagh');" class="ui-btn ui-shadow ui-corner-all" >Fermanagh</a></li>
-				<li><a href="#county-search-results"   onclick="runSearchCounty('Monaghan');"  class="ui-btn ui-shadow ui-corner-all" >Monaghan</a></li>
 				<li><a href="#county-search-results"   onclick="runSearchCounty('Tyrone');"    class="ui-btn ui-shadow ui-corner-all" >Tyrone</a></li>
 			</ul>
 		</div><!-- /footer -->
@@ -82,8 +80,7 @@
 				<li><a href="#county-search-results"   onclick="runSearchCounty('Tipperary');" class="ui-btn ui-shadow ui-corner-all">Tipperary</a></li>
 				<li><a href="#county-search-results"   onclick="runSearchCounty('Waterford');" class="ui-btn ui-shadow ui-corner-all">Waterford</a></li>
 				<li><a href="#county-search-results"   onclick="runSearchCounty('Kerry');" class="ui-btn ui-shadow ui-corner-all">Kerry</a></li>
-				<li><a href="#county-search-results"   onclick="runSearchCounty('Waterford');"  class="ui-btn ui-shadow ui-corner-all">Waterford</a></li>
-
+				<li><a href="#county-search-results"   onclick="runSearchCounty('Limerick');"  class="ui-btn ui-shadow ui-corner-all">Limerick</a></li>
 			</ul>
 		</div><!-- /footer -->
 	</div><!-- /southern area -->
@@ -179,19 +176,25 @@
 			<div data-role='collapsible' data-autodividers='true' >
 				<h4>Irish NA Websites</h4>
 				<ul style='padding: 0px !important'>
-					<li style='list-style-type: none !important'><h4>Regional Website</h4><p><i class="fa fa-globe"></i>&nbsp;<a href='http://www.na-ireland.org'>http://www.na-ireland.org</a></li>
-					<li style='list-style-type: none !important'><h4>Southern Area</h4><p><i class="fa fa-globe"></i>&nbsp;<a href='http://nasouth.ie/'>http://www.nasouth.ie</a></li>
-					<li style='list-style-type: none !important'><h4>Eastern Area</h4><p><i class="fa fa-globe"></i>&nbsp;<a href='http://www.naeasternarea.org'>http://www.naeasternarea.org</a></li>
-					<li style='list-style-type: none !important'><h4>Northern Area</h4><p><i class="fa fa-globe"></i>&nbsp;<a href='http://www.nanorthernireland.com'>http://www.nanorthernireland.com</a></li>
+					<li style='list-style-type: none !important'><h4>Regional Website</h4><p><i class="fa fa-globe"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color: white;" href='http://www.na-ireland.org'>http://www.na-ireland.org</a></li>
+					<li style='list-style-type: none !important'><h4>Southern Area</h4><p><i class="fa fa-globe"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color: white;" href='http://nasouth.ie/'>http://www.nasouth.ie</a></li>
+					<li style='list-style-type: none !important'><h4>Eastern Area</h4><p><i class="fa fa-globe"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color: white;" href='http://www.naeasternarea.org'>http://www.naeasternarea.org</a></li>
+					<li style='list-style-type: none !important'><h4>Northern Area</h4><p><i class="fa fa-globe"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color: white;" href='http://www.nanorthernireland.com'>http://www.nanorthernireland.com</a></li>
+					<li style='list-style-type: none !important'>
+						<br><i style="font-family:verdana;font-size:16px;color: white;">Click on any of the websites above to visit the site</i>
+					</li>
 				</ul>
 			</div>
 			<div data-role='collapsible' data-autodividers='true' >
 				<h4>Area Email Addresses</h4>
 				<ul style='padding: 0px !important'>
-					<li style='list-style-type: none !important'>&nbsp;<i class="fa fa-envelope"></i>&nbsp;<a href="mailto:info@na-ireland.org"> Regional Contact </a></li>
-					<li style='list-style-type: none !important'>&nbsp;<i class="fa fa-envelope"></i>&nbsp;<a href="mailto:info@naeasternarea.org"> Eastern Area</a></li>
-					<li style='list-style-type: none !important'>&nbsp;<i class="fa fa-envelope"></i>&nbsp;<a href="mailto:info@nasouth.ie"> Southern Area</a></li>
-					<li style='list-style-type: none !important'>&nbsp;<i class="fa fa-envelope"></i>&nbsp;<a href="mailto:contact@nanorthernireland.com"> Northern Area</a></li>
+					<li style='list-style-type: none !important'>&nbsp;<i class="fa fa-envelope"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color: white;" href="mailto:info@na-ireland.org"> Regional Contact </a></li>
+					<li style='list-style-type: none !important'>&nbsp;<i class="fa fa-envelope"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color: white;" href="mailto:info@naeasternarea.org"> Eastern Area</a></li>
+					<li style='list-style-type: none !important'>&nbsp;<i class="fa fa-envelope"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color: white;" href="mailto:info@nasouth.ie"> Southern Area</a></li>
+					<li style='list-style-type: none !important'>&nbsp;<i class="fa fa-envelope"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color: white;" href="mailto:contact@nanorthernireland.com"> Northern Area</a></li>
+					<li style='list-style-type: none !important'>
+						<br><i style="font-family:verdana;font-size:16px;color: white;">Click on any of the email addresses above to send an email</i>
+					</li>
 				</ul>
 			</div>
 			<div data-role='collapsible' data-autodividers='true' >
@@ -200,27 +203,30 @@
                     <li style='list-style-type: none !important'>
                     <h4>Regional Info Line</h4>
                     <p style="font-family:verdana;font-size:14px;">Information line only</p>
-                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a href="tel:+353016728000"> Tel: +353 (0)1-6728 000</a></p>
+                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a style="font-family:verdana;font-size:16px;color: white;" href="tel:+353016728000"> Tel: +353 (0)1-6728 000</a></p>
                     </li>
                     <li style='list-style-type: none !important'>
                     <h4>Eastern Area</h4>
-                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a href="tel:+3530868629308"> Tel: +353 (0) 86-8629 308</a></p>
+                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a style="font-family:verdana;font-size:16px;color: white;" href="tel:+3530868629308"> Tel: +353 (0) 86-8629 308</a></p>
                     </li>
                     <li style='list-style-type: none !important'>
                     <h4>Southern Area</h4>
                     <p style="font-family:verdana;font-size:14px;">Every evening from 6-9pm</p>
-                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a href="tel:+3530871386120"> Tel: +353 (0) 87-1386 120</a></p>
+                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a style="font-family:verdana;font-size:16px;color: white;" href="tel:+3530871386120"> Tel: +353 (0) 87-1386 120</a></p>
                     </li>
                     <li style='list-style-type: none !important'>
                     <h4>Western Area</h4>
-                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a href="tel:+3530868149004"> Tel: +353 (0) 86-8149 004</a></p>
+                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a style="font-family:verdana;font-size:16px;color: white;" href="tel:+3530868149004"> Tel: +353 (0) 86-8149 004</a></p>
                     </li>
                     <li style='list-style-type: none !important'>
                     <h4>Northern Area</h4>
                     <p style="font-family:verdana;font-size:14px;">Every evening from 7-10pm</p>
-                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a href="tel:+447810172991">Tel: +44 781-0172991</a></p>
-                    <p style="font-family:verdana;font-size:14px;">In Donegal, you can call&nbsp;<i class="fa fa-phone"></i>&nbsp;<a href="tel:+3530860668377">+353 (0) 86-066 8377</a></p>
+                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a style="font-family:verdana;font-size:16px;color: white;" href="tel:+447810172991">Tel: +44 781-0172991</a></p>
+                    <p style="font-family:verdana;font-size:14px;">In Donegal, you can call&nbsp;<i class="fa fa-phone"></i>&nbsp;<a style="font-family:verdana;font-size:16px;color: white;" href="tel:+3530860668377">+353 (0) 86-066 8377</a></p>
                     </li>
+					<li style='list-style-type: none !important'>
+					<i style="font-family:verdana;font-size:16px;color: white;">Click on any of the numbers above to call them from your phone</i>
+					</li>
                 </ul>
             </div>
 			<div data-role='collapsible' data-autodividers='true' >
@@ -231,7 +237,8 @@
                     <p style="font-family:verdana;font-size:14px;">Service Office,</p>
                     <p style="font-family:verdana;font-size:14px;">29 Bride Street,</p>
                     <p style="font-family:verdana;font-size:14px;">Dublin 8</p>
-                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a href="tel:+353016728000"> Tel: 01 - 672 8000</a></p>
+                    <p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-phone"></i>&nbsp;<a style="font-family:verdana;font-size:16px;color: white;" href="tel:+353016728000"> Tel: 01 - 672 8000</a></p>
+					<p style="font-family:verdana;font-size:14px;">&nbsp;<i class="fa fa-envelope"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color: white;" href="mailto:irishserviceoffice@gmail.com">Email the Irish Service Office</a></p>
                     </li>
                 </ul>
             </div>
@@ -239,11 +246,11 @@
                 <h4>About this app</h4>
                 <ul style='padding: 0px !important'>
                     <li style='list-style-type: none !important'>
-                        <p style="font-family:verdana;font-size:14px;">Please report any bugs to &nbsp;<i class="fa fa-envelope"></i>&nbsp;<a href=mailto:web@na-ireland.org">this email address</a> </p>
+                        <p style="font-family:verdana;font-size:14px;">Please report any bugs to &nbsp;<i class="fa fa-envelope"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color:white;" href=mailto:web@na-ireland.org">this email address</a> </p>
                         <hr>
-                        <p style="font-family:verdana;font-size:14px;">If you are a speaker featured on this app, and would like to be removed from the app, please let us know &nbsp;<i class="fa fa-envelope"></i>&nbsp;<a href=mailto:web@na-ireland.org">this email address</a>.</p>
+                        <p style="font-family:verdana;font-size:14px;">If you are a speaker featured on this app, and would like to be removed from the app, please let us know &nbsp;<i class="fa fa-envelope"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color:white" href=mailto:web@na-ireland.org">this email address</a>.</p>
                         <hr>
-                        <p style="font-family:verdana;font-size:14px;">The source code for this app is available from &nbsp;<i class="fa fa-globe"></i>&nbsp;<a href='https://github.com/paulnagle/NA-IRELAND-ANDROID-V2' target="_blank">github</a>. Feel free to copy and use as you see fit.</p>
+                        <p style="font-family:verdana;font-size:14px;">The source code for this app is available from &nbsp;<i class="fa fa-globe"></i>&nbsp;<a style="font-family:verdana;font-size:14px;color:white" href='https://github.com/paulnagle/NA-IRELAND-ANDROID-V2' target="_blank">github</a>. Feel free to copy and use as you see fit.</p>
                     </li>
                 </ul>
             </div>
