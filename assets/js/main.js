@@ -39,7 +39,6 @@ $( document ).on( "pagecontainershow", function ( event, ui ) {
 
 	if (pageId == "events"){
 		$(".UpcomingEvents").empty();
-//		$.get("http://android.nasouth.ie/proxy.php?url=http://www.na-ireland.org/for-our-members/conventions-events/", function( data ) {
 		$.get("http://www.na-ireland.org/category/upcoming-events/", function( data ) {
 			elements = $( data );
 			found = $('.site-main', elements);
@@ -56,7 +55,7 @@ $( document ).on( "pagecontainershow", function ( event, ui ) {
 // Load the spinner if an ajaxStart occurs; stop when it is finished
 $(document).on({
   ajaxStart: function() {
-    $.mobile.loading('show');
+    $.mobile.loading('show', { text: "Loading...", textVisible: true, theme: 'b' });
   },
   ajaxStop: function() {
     $.mobile.loading('hide');
@@ -75,12 +74,11 @@ function dayOfWeekAsString(dayIndex) {
 
 // This function runs the query to the BMLT and displays the results per county
 function runSearchCounty(county) {
-	var target = document.getElementById('county-results');
-	$("#county-results").empty();
-	var spinner = new Spinner().spin();
-	target.appendChild(spinner.el);
 
-	raw_meeting_json = false;
+    var interval = setInterval(function(){
+        $.mobile.loading('show', { text: "Loading...", textVisible: true, theme: 'b' });
+        clearInterval(interval);
+    },1);
 
 	var search_url = "http://www.nasouth.ie/bmlt/main_server/client_interface/json/";
 	search_url += "?switcher=GetSearchResults";
@@ -91,6 +89,7 @@ function runSearchCounty(county) {
 	DEBUG && console.log("Search URL = "+ search_url);
 
 	$.getJSON(search_url, function( data) {
+        $("#county-results").empty();
 
 		var sunCount =0, monCount =0, tueCount = 0, wedCount = 0, thuCount = 0, friCount = 0, satCount = 0;
 		var sunExpandLi = "<ul style='padding: 0px !important'><div data-role='collapsible' data-autodividers='true' ><h4 id='sunHead'>Sunday</h4>";
@@ -110,7 +109,8 @@ function runSearchCounty(county) {
 
 			fromHere = "'" + myLat + ',' + myLng + "'";
 			toHere   = "'" + val.latitude + ',' + val.longitude + "'";
-			markerContent += '<i class="fa fa-map-o"></i>&nbsp;<a href="http://maps.google.com/maps?daddr=';
+
+			markerContent += '<i style="color: rgba(215, 44, 44, 0.5);" class="fa fa-map-marker"></i>&nbsp;<a style="color: rgba(215, 44, 44, 0.5);" href="http://maps.google.com/maps?daddr=';
 			markerContent += val.latitude + ',' + val.longitude;
 			markerContent +='">Directions</a></li>';
 			markerContent += '<br><hr>';
@@ -150,21 +150,21 @@ function runSearchCounty(county) {
 		$("#friHead").text("Friday ("    + friCount + (friCount == 1 ? " meeting)" : " meetings)"));
 		$("#satHead").text("Saturday ("  + satCount + (satCount == 1 ? " meeting)" : " meetings)"));
 
-		spinner.stop();
+        var interval = setInterval(function(){
+            $.mobile.loading('hide');
+            clearInterval(interval);
+        },1);
+
 		var div = $('#county-results');
 		div.enhanceWithin();
 	});
 }
 
 function populateConventions() {
-
-	conventionsURL = "http://android.nasouth.ie/conventions.json";
+    conventionsURL = "http://android.nasouth.ie/conventions.json";
 
 	$.getJSON(conventionsURL, function( data) {
-		var target = document.getElementById('fillSpeakers');
 		$("#fillSpeakers").empty();
-		var spinner = new Spinner().spin();
-		target.appendChild(spinner.el);
 
 		var conventionLi = "<ul id='playlist' data-role='listview' class='ui-listview-outer' data-inset='true' >";
 		$.each(data, function() {
@@ -172,7 +172,6 @@ function populateConventions() {
 				conventionLi += "<li data-role='collapsible' data-iconpos='right' data-shadow='false' data-corners='false'>";
 				conventionLi += "<h2>" + v.convention_name + "</h2>";
 				conventionLi += "<ul id='test2' data-role='listview' data-shadow='false' data-inset='true' data-corners='true'>";
-//				DEBUG && console.log("Convention = " + v.convention_name);
 				var ords = v.speakers;
 				var speakerLi = "";
 				$.each(ords, function(k2, v2) {
@@ -186,12 +185,11 @@ function populateConventions() {
 			});
 		});
 		conventionLi += "</ul>";
-		spinner.stop();
+
 		$('#fillSpeakers').append( conventionLi );
 
 		var div = $('#fillSpeakers');
 		div.enhanceWithin();
-
 	});
 }
 

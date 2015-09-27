@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            onDestroy();
             MainActivity.this.finish();
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(0);
