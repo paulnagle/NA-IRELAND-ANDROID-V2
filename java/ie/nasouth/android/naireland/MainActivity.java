@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         final String url = "file:///android_asset/index.html";
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         webView = (WebView) findViewById(R.id.activity_main_webview);
