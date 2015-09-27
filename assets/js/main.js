@@ -110,9 +110,9 @@ function runSearchCounty(county) {
 			fromHere = "'" + myLat + ',' + myLng + "'";
 			toHere   = "'" + val.latitude + ',' + val.longitude + "'";
 
-			markerContent += '<i style="color: rgba(215, 44, 44, 0.5);" class="fa fa-map-marker"></i>&nbsp;<a style="color: rgba(215, 44, 44, 0.5);" href="http://maps.google.com/maps?daddr=';
+			markerContent += '<a href="http://maps.google.com/maps?daddr=';
 			markerContent += val.latitude + ',' + val.longitude;
-			markerContent +='">Directions</a></li>';
+			markerContent += '" data-role="button" data-inline="true" >Directions</a></li>';
 			markerContent += '<br><hr>';
 
 			switch (val.weekday_tinyint) {
