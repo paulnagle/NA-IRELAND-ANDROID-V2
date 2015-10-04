@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import android.media.MediaPlayer.OnPreparedListener;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -50,7 +51,24 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnPreparedListener(this);
 
-        mediaController = new MediaController(this);
+//        mediaController = new MediaController(this);
+        // Dont ever hide the MediaController
+        mediaController = new MediaController(this) {
+            @Override
+            public void hide() {
+                //Do not hide.
+            }
+
+            //for 'back' key action
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent event) {
+                if(event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+                    Activity a = (Activity)getContext();
+                    a.finish();
+                }
+                return super.dispatchKeyEvent(event);
+            }
+        };
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             Log.d(TAG, " Audio filename = " + audioFile);
@@ -76,7 +94,7 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mediaController.show(0);
+        mediaController.show(900000);
         return false;
     }
 
@@ -135,7 +153,7 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
                 ((TextView) findViewById(R.id.now_playing_text)).setText(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
                 mediaPlayer.start();
                 mediaController.setEnabled(true);
-                mediaController.show(0);
+                mediaController.show(9000000);
             }
         });
     }
@@ -157,7 +175,8 @@ public class AudioPlayer extends Activity implements OnPreparedListener, MediaCo
         if (mediaPlayer != null) {
             mediaPlayer.start();
             mediaPlayer.seekTo(pausedPosition);
-            mediaController.show(0);
+            mediaPlayer.pause();
+            mediaController.show(90000000);
         }
     }
 }
